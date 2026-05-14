@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#040d07">
+  <title>Arena Max — Sua Casa Vira um Estádio | Copa 2026</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --void:#020a05;
+      --g1:#040d07;--g2:#071a0e;--g3:#0d2e1a;--g4:#1a4a2e;
+      --y:#FFD700;--ya:#D4AF37;--yb:#E5A800;
+      --r:#dc2626;--rg:rgba(220,38,38,.15);
+      --w:#fff;--w9:rgba(255,255,255,.9);--w7:rgba(255,255,255,.7);
+      --w5:rgba(255,255,255,.5);--w3:rgba(255,255,255,.3);--w1:rgba(255,255,255,.07);
+      --card:rgba(255,255,255,.04);--border:rgba(255,215,0,.18);
+      --stroke:rgba(255,255,255,.1);
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+      background:var(--g1);color:var(--w);overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ── LUCIDE ICON SIZING ── */
+    [data-lucide]{display:inline-block;vertical-align:middle;flex-shrink:0}
+    .ic-xs{width:14px;height:14px}
+    .ic-sm{width:18px;height:18px}
+    .ic-md{width:24px;height:24px}
+    .ic-lg{width:32px;height:32px}
+    .ic-xl{width:44px;height:44px}
+    .ic-y{stroke:var(--y)}
+    .ic-w{stroke:#fff}
+    .ic-w5{stroke:var(--w5)}
+    .ic-r{stroke:#f87171}
+    .ic-g{stroke:#4ade80}
+    .ic-dark{stroke:#0a1a00}
+
+    /* ── TOPBAR ── */
+    .topbar{
+      background:#070f04;border-bottom:1px solid rgba(255,215,0,.15);
+      color:var(--ya);font-size:12px;font-weight:700;letter-spacing:.8px;
+      text-transform:uppercase;padding:10px 16px;
+      min-height:38px;display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .topbar::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,215,0,.04),transparent);
+      animation:sweep 4s ease-in-out infinite;
+    }
+    @keyframes sweep{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+    .topbar-msg{position:absolute;width:100%;text-align:center;display:flex;
+      align-items:center;justify-content:center;gap:8px;
+      transition:opacity .5s,transform .5s;opacity:0;transform:translateY(10px)}
+    .topbar-msg.active{opacity:1;transform:translateY(0);position:relative}
+
+    /* ── COUNTDOWN BANNER ── */
+    .countdown-bar{
+      background:linear-gradient(90deg,#0d2e1a,#1a4a2e,#0d2e1a);
+      border-bottom:1px solid rgba(255,215,0,.2);
+      padding:14px 20px;text-align:center;
+    }
+    .countdown-bar p{font-size:13px;color:var(--w7);margin-bottom:10px}
+    .countdown-bar p strong{color:var(--ya)}
+    .countdown-digits{
+      display:flex;justify-content:center;gap:8px;
+    }
+    .cd-block{
+      background:rgba(0,0,0,.4);border:1px solid rgba(255,215,0,.2);
+      border-radius:10px;padding:10px 14px;min-width:60px;text-align:center;
+    }
+    .cd-num{
+      font-size:26px;font-weight:900;line-height:1;
+      background:linear-gradient(135deg,#FFD700,#FFC107);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .cd-label{font-size:9px;color:var(--w3);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+    /* ── HERO ── */
+    .hero{
+      background:radial-gradient(ellipse 130% 80% at 50% -5%,#1a3a20,#040d07 65%);
+      min-height:calc(100dvh - 158px);
+      padding:0 20px;text-align:center;
+      display:flex;flex-direction:column;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse 60% 35% at 50% 0%,rgba(255,215,0,.07),transparent 60%),
+        radial-gradient(ellipse 25% 50% at 10% 40%,rgba(45,110,69,.12),transparent),
+        radial-gradient(ellipse 25% 50% at 90% 40%,rgba(45,110,69,.12),transparent);
+      animation:atm 6s ease-in-out infinite alternate;
+    }
+    @keyframes atm{from{opacity:.5}to{opacity:1}}
+    .hero-beams{position:absolute;top:0;left:0;right:0;height:45%;pointer-events:none;overflow:hidden}
+    .hero-beams::before,.hero-beams::after{
+      content:'';position:absolute;top:0;width:1px;height:100%;
+      background:linear-gradient(180deg,rgba(255,215,0,.1),transparent);
+      animation:beam 5s ease-in-out infinite;
+    }
+    .hero-beams::before{left:28%;animation-delay:0s}
+    .hero-beams::after{right:28%;animation-delay:2.5s}
+    @keyframes beam{0%,100%{opacity:.2;transform:scaleX(1) rotate(-6deg)}50%{opacity:.6;transform:scaleX(4) rotate(-6deg)}}
+    .hero-fog{position:absolute;bottom:0;left:-10%;right:-10%;height:30%;
+      background:linear-gradient(0deg,rgba(4,13,7,.95),transparent);pointer-events:none}
+    #particles{position:absolute;inset:0;pointer-events:none}
+    .hero-inner{position:relative;z-index:2;width:100%;max-width:420px;margin:0 auto}
+
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);
+      color:var(--ya);font-size:10px;font-weight:800;
+      padding:6px 14px;border-radius:20px;letter-spacing:1.5px;
+      text-transform:uppercase;margin-bottom:20px;
+    }
+    .hero-badge .dot{
+      width:6px;height:6px;border-radius:50%;background:var(--y);
+      animation:dot-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes dot-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.5)}60%{box-shadow:0 0 0 6px rgba(255,215,0,0)}}
+
+    .hero h1{
+      font-size:clamp(32px,8vw,44px);font-weight:900;
+      line-height:1.1;letter-spacing:-.5px;margin-bottom:8px;
+    }
+    .hero h1 em{
+      display:block;font-style:normal;
+      font-size:clamp(38px,9.5vw,52px);
+      background:linear-gradient(135deg,#FFD700,#FFC107,#ffe98a);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-sub{
+      font-size:16px;color:var(--w7);line-height:1.6;
+      margin-bottom:28px;max-width:340px;margin-left:auto;margin-right:auto;
+    }
+    .hero-sub strong{color:var(--w9)}
+
+    .hero-scroll-hint{
+      position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;
+      animation:scroll-bounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scroll-bounce{
+      0%,100%{transform:translateX(-50%) translateY(0);opacity:.4}
+      50%{transform:translateX(-50%) translateY(6px);opacity:1}
+    }
+
+    .hero-below{
+      background:radial-gradient(ellipse 130% 60% at 50% 0%,#0d2014,#040d07 70%);
+      padding:32px 20px 16px;display:flex;flex-direction:column;align-items:center;gap:24px;
+    }
+
+    .hero-visual{
+      width:100%;max-width:390px;height:230px;
+      background:linear-gradient(145deg,#071a0e,#040d07);
+      border-radius:20px;margin:0 auto 30px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+      border:1px solid rgba(255,215,0,.2);position:relative;overflow:hidden;
+      box-shadow:0 0 60px rgba(255,215,0,.06),0 24px 60px rgba(0,0,0,.7);
+    }
+    .hero-visual::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 90%,rgba(255,215,0,.05),transparent);
+    }
+    .hero-visual::after{
+      content:'';position:absolute;top:-100%;left:0;right:0;height:30%;
+      background:linear-gradient(180deg,transparent,rgba(255,215,0,.02),transparent);
+      animation:scan 3.5s linear infinite;
+    }
+    @keyframes scan{to{top:200%}}
+    .hero-visual-label{font-size:11px;color:var(--w3);padding:0 24px;text-align:center;line-height:1.6;position:relative;z-index:1}
+
+    .hero-checks{
+      text-align:left;max-width:360px;margin:0 auto 28px;
+      display:flex;flex-direction:column;gap:11px;
+    }
+    .hero-check{
+      display:flex;align-items:center;gap:10px;
+      font-size:15px;color:var(--w8,rgba(255,255,255,.85));
+    }
+    .check-circle-wrap{
+      width:22px;height:22px;border-radius:50%;
+      background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary{
+      display:flex;align-items:center;justify-content:center;gap:9px;
+      width:100%;max-width:400px;
+      background:linear-gradient(135deg,#FFD700 0%,#FFC107 60%,#E5A800 100%);
+      color:#0a1500;font-size:16px;font-weight:900;
+      padding:20px 28px;border-radius:16px;
+      text-decoration:none;text-align:center;
+      margin:0 auto;text-transform:uppercase;letter-spacing:.7px;
+      box-shadow:0 0 0 0 rgba(255,215,0,.3),0 12px 40px rgba(255,180,0,.3);
+      animation:cta-glow 3s ease-in-out infinite;
+      position:relative;overflow:hidden;
+    }
+    @keyframes cta-glow{
+      0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.2),0 12px 40px rgba(255,180,0,.3)}
+      50%{box-shadow:0 0 0 10px rgba(255,215,0,0),0 12px 40px rgba(255,180,0,.5)}
+    }
+    .btn-primary::after{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+      animation:shimmer 2.8s infinite;
+    }
+    @keyframes shimmer{to{left:100%}}
+    .btn-primary:active{transform:scale(.97)}
+
+    .btn-sec{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;max-width:400px;
+      background:linear-gradient(135deg,#FFD700,#FFA500);
+      color:#0a1500;font-size:15px;font-weight:900;
+      padding:18px 24px;border-radius:14px;
+      text-decoration:none;margin:0 auto;
+      text-transform:uppercase;letter-spacing:.6px;
+      box-shadow:0 8px 28px rgba(255,165,0,.25);
+      position:relative;overflow:hidden;
+    }
+    .btn-sec::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 2.8s infinite;}
+    .btn-sec:active{transform:scale(.97)}
+
+    .btn-ghost{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;max-width:400px;
+      background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);
+      color:var(--ya);font-size:14px;font-weight:800;
+      padding:15px 24px;border-radius:12px;
+      text-decoration:none;margin:12px auto 0;
+      text-transform:uppercase;letter-spacing:.5px;
+    }
+
+    .microcopy{
+      display:flex;align-items:center;justify-content:center;
+      flex-wrap:wrap;gap:4px 12px;
+      font-size:12px;color:var(--w3);margin-top:14px;
+    }
+    .microcopy-item{display:flex;align-items:center;gap:5px}
+
+    /* ── TRUST STRIP ── */
+    .trust{
+      background:rgba(0,0,0,.3);border-bottom:1px solid var(--w1);
+      padding:12px 12px;display:grid;grid-template-columns:repeat(4,1fr);
+    }
+    .trust-item{
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      padding:0 6px;border-right:1px solid var(--w1);
+    }
+    .trust-item:last-child{border-right:none}
+    .trust-label{font-size:9px;color:var(--w5);text-align:center;line-height:1.4;
+      text-transform:uppercase;letter-spacing:.3px}
+
+    /* ── SECTIONS ── */
+    section{padding:36px 20px}
+    .eyebrow{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      font-size:10px;font-weight:800;letter-spacing:3px;
+      text-transform:uppercase;color:var(--ya);margin-bottom:14px;
+    }
+    .eyebrow::before,.eyebrow::after{
+      content:'';flex:1;height:1px;max-width:40px;
+      background:linear-gradient(90deg,transparent,rgba(255,215,0,.3));
+    }
+    .eyebrow::after{background:linear-gradient(90deg,rgba(255,215,0,.3),transparent)}
+    .stitle{
+      font-size:clamp(24px,6vw,32px);font-weight:900;
+      line-height:1.2;margin-bottom:14px;letter-spacing:-.3px;
+    }
+    .stitle em{
+      font-style:normal;
+      background:linear-gradient(135deg,#FFD700,#FFC107);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .sbody{font-size:15px;line-height:1.75;color:var(--w7)}
+    .sbody strong{color:var(--w9)}
+    .sdivider{
+      width:56px;height:2px;margin:0 auto 22px;
+      background:linear-gradient(90deg,transparent,var(--y),transparent);
+    }
+    .ta-c{text-align:center}
+    .mt2{margin-top:8px}.mt3{margin-top:12px}.mt4{margin-top:16px}
+    .mt6{margin-top:24px}.mt8{margin-top:32px}
+
+    /* ── PROBLEM ── */
+    .problem{
+      background:linear-gradient(180deg,var(--g2),var(--void));
+      text-align:center;
+    }
+    .problem-icon-wrap{
+      width:72px;height:72px;border-radius:50%;
+      background:rgba(255,255,255,.04);border:1px solid var(--stroke);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 24px;
+    }
+
+    /* ── EXPERIENCE / MOOD ── */
+    .experience{
+      background:radial-gradient(ellipse 100% 60% at 50% 100%,#0d2e1a,var(--void));
+      text-align:center;
+    }
+    .mood-grid{display:flex;flex-direction:column;gap:0;margin-top:32px}
+    .mood-item{
+      padding:28px 22px;border-bottom:1px solid var(--w1);
+      display:flex;align-items:flex-start;gap:16px;
+      position:relative;overflow:hidden;
+    }
+    .mood-item::before{
+      content:'';position:absolute;top:0;left:0;width:2px;height:100%;
+      background:linear-gradient(180deg,var(--y),var(--yb));
+    }
+    .mood-icon-wrap{
+      width:44px;height:44px;border-radius:12px;flex-shrink:0;
+      background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .mood-text h3{font-size:16px;font-weight:800;color:var(--w);margin-bottom:5px}
+    .mood-text p{font-size:13px;color:var(--w5);line-height:1.6}
+
+    /* ── SOCIAL PROOF (early) ── */
+    .proof-early{background:var(--g2)}
+    .proof-count{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      margin-bottom:32px;
+    }
+    .proof-count-num{
+      font-size:40px;font-weight:900;
+      background:linear-gradient(135deg,#FFD700,#FFC107);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1;
+    }
+    .proof-count-text{font-size:13px;color:var(--w5);line-height:1.5}
+    .testi-grid{display:flex;flex-direction:column;gap:14px}
+    .testi-card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:20px;padding:22px;position:relative;overflow:hidden;
+    }
+    .testi-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,215,0,.3),transparent);
+    }
+    .testi-stars{display:flex;gap:3px;margin-bottom:10px}
+    .testi-text{font-size:15px;color:var(--w9);line-height:1.65;
+      margin-bottom:16px;font-style:italic}
+    .testi-author{display:flex;align-items:center;gap:12px}
+    .testi-av{
+      width:44px;height:44px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--y),var(--yb));
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;font-style:normal;font-weight:900;color:#0a1500;
+    }
+    .testi-name{font-size:14px;font-weight:800;color:var(--w)}
+    .testi-loc{font-size:11px;color:var(--w3);margin-top:2px;display:flex;align-items:center;gap:5px}
+
+    /* ── BENEFITS CARDS ── */
+    .benefits{background:var(--g1)}
+    .cards-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;
+    }
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:16px;padding:20px 14px;
+      position:relative;overflow:hidden;
+    }
+    .card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,215,0,.2),transparent);
+    }
+    .card-icon-wrap{
+      width:44px;height:44px;border-radius:12px;
+      background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.12);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:12px;
+    }
+    .card h3{font-size:13px;font-weight:800;color:var(--ya);margin-bottom:5px}
+    .card p{font-size:12px;color:var(--w5);line-height:1.55}
+
+    /* ── DEMO ── */
+    .demo{background:var(--void);text-align:center}
+    .demo-visual{
+      width:100%;max-width:400px;height:240px;
+      background:linear-gradient(145deg,#071a0e,#020a05);
+      border-radius:20px;margin:28px auto 0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      border:1px solid rgba(255,215,0,.18);cursor:pointer;gap:16px;
+      position:relative;overflow:hidden;
+      box-shadow:0 0 40px rgba(0,0,0,.8);
+    }
+    .demo-visual::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(255,215,0,.04),transparent);
+      animation:glow-breathe 3s ease-in-out infinite;
+    }
+    @keyframes glow-breathe{0%,100%{opacity:.5}50%{opacity:1}}
+    .play-btn{
+      width:68px;height:68px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(255,215,0,.9),rgba(255,165,0,.9));
+      display:flex;align-items:center;justify-content:center;
+      position:relative;z-index:1;
+      box-shadow:0 0 30px rgba(255,215,0,.25),0 0 60px rgba(255,215,0,.1);
+      animation:play-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes play-pulse{
+      0%,100%{box-shadow:0 0 30px rgba(255,215,0,.25),0 0 60px rgba(255,215,0,.1)}
+      50%{box-shadow:0 0 50px rgba(255,215,0,.45),0 0 80px rgba(255,215,0,.2)}
+    }
+    .demo-caption{font-size:12px;color:var(--w3);padding:0 32px;line-height:1.6;position:relative;z-index:1}
+    .demo-sub{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+      max-width:400px;margin:16px auto 0;
+    }
+    .demo-chip{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:12px;padding:14px 8px;text-align:center;
+    }
+    .demo-chip-icon{display:flex;justify-content:center;margin-bottom:7px}
+    .demo-chip span{font-size:11px;color:var(--w5);line-height:1.4}
+
+    /* ── COMPARISON ── */
+    .compare{background:radial-gradient(ellipse 100% 60% at 50% 50%,#0d2e1a,var(--void))}
+    .compare-table{
+      width:100%;margin-top:28px;border-radius:18px;overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .ct-head{display:grid;grid-template-columns:1.4fr 1fr 1fr;background:rgba(0,0,0,.5)}
+    .ct-head div{padding:14px 8px;text-align:center;font-size:12px;font-weight:800;letter-spacing:.3px}
+    .ct-head div:nth-child(2){
+      background:linear-gradient(135deg,rgba(255,215,0,.9),rgba(229,168,0,.9));
+      color:#0a1500;font-size:13px;
+    }
+    .ct-head div:nth-child(3){color:var(--w3);font-size:11px}
+    .ct-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;border-top:1px solid rgba(255,255,255,.04)}
+    .ct-row div{padding:13px 8px;display:flex;align-items:center;justify-content:center}
+    .ct-row div:first-child{
+      font-size:12px;color:var(--w5);font-weight:600;
+      justify-content:flex-start;padding-left:14px;
+    }
+    .ct-row div:nth-child(2){background:rgba(255,215,0,.04)}
+
+    /* ── OFFER ── */
+    .offer{
+      background:radial-gradient(ellipse 120% 80% at 50% 0%,#1a3a20,var(--void));
+      text-align:center;
+    }
+    .offer-box{
+      max-width:400px;margin:24px auto 0;
+      background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+      border:1px solid rgba(255,215,0,.25);border-radius:24px;padding:32px 22px;
+      position:relative;overflow:hidden;
+      box-shadow:0 0 60px rgba(255,215,0,.06),inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .offer-box::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,215,0,.5),transparent);
+    }
+    .offer-discount-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);
+      color:#fca5a5;font-size:10px;font-weight:800;
+      padding:5px 13px;border-radius:20px;
+      text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;
+    }
+    .price-from{font-size:14px;color:var(--w3);text-decoration:line-through;margin-bottom:6px}
+
+    /* PARCELAMENTO — destaque principal */
+    .price-installment{
+      display:flex;align-items:baseline;justify-content:center;gap:8px;
+      line-height:1; margin-bottom:8px;
+      background:linear-gradient(135deg,#FFD700,#FFC107,#ffe98a);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .price-installment .inst-x{font-size:34px;font-weight:900;letter-spacing:-1px}
+    .price-installment .inst-currency{font-size:22px;font-weight:800;}
+    .price-installment .inst-value{font-size:62px;font-weight:900;letter-spacing:-2px}
+    .price-installment .inst-decimals{font-size:24px;font-weight:800;align-self:flex-start;margin-top:8px}
+    .price-installment-label{
+      font-size:12px;color:var(--w4);text-transform:uppercase;letter-spacing:1.5px;
+      font-weight:700;margin-bottom:14px;
+    }
+    /* PREÇO À VISTA — secundário, menor */
+    .price-cash{
+      font-size:14px;color:var(--w6);margin-bottom:6px;
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    .price-cash strong{
+      color:var(--w8);font-weight:800;font-size:15px;
+    }
+    /* legados (mantidos para compatibilidade caso usados em outros lugares) */
+    .price-main{
+      font-size:34px;font-weight:800;line-height:1;margin-bottom:4px;
+      color:var(--w7);
+    }
+    .price-main sup{font-size:14px;vertical-align:super;color:var(--w5)}
+    .price-main sub{font-size:14px;vertical-align:baseline;color:var(--w5)}
+    .price-inst{font-size:13px;color:var(--w5);margin-bottom:6px}
+    .price-saving{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);
+      color:#4ade80;font-size:11px;font-weight:700;
+      padding:4px 12px;border-radius:20px;margin-bottom:28px;
+    }
+    .offer-stack{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;text-align:left}
+    .offer-row{
+      display:flex;align-items:center;gap:12px;
+      padding:12px 14px;background:rgba(255,255,255,.03);
+      border:1px solid var(--w1);border-radius:12px;
+    }
+    .offer-row-icon{
+      width:36px;height:36px;border-radius:10px;flex-shrink:0;
+      background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.15);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .offer-row-text{flex:1}
+    .offer-row-title{font-size:13px;font-weight:800;color:var(--w9)}
+    .offer-row-sub{font-size:11px;color:var(--w5);margin-top:2px}
+    .offer-row-badge{
+      font-size:10px;font-weight:800;color:#4ade80;
+      white-space:nowrap;
+    }
+
+    /* ── URGENCY / SCARCITY ── */
+    .urgency{
+      background:linear-gradient(160deg,#1a0505,#0d0202,#1a0505);
+      border-top:2px solid rgba(239,68,68,.4);
+      border-bottom:2px solid rgba(239,68,68,.4);
+      padding:48px 20px;text-align:center;
+      position:relative;overflow:hidden;
+    }
+    .urgency::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse 80% 50% at 50% 50%,rgba(220,38,38,.05),transparent);
+      animation:atm 4s ease-in-out infinite alternate;
+    }
+    .urgency-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);
+      color:#fca5a5;font-size:10px;font-weight:800;
+      padding:5px 14px;border-radius:20px;letter-spacing:2px;
+      text-transform:uppercase;margin-bottom:20px;
+    }
+    .urgency-live{
+      width:7px;height:7px;border-radius:50%;background:#ef4444;
+      animation:dot-pulse 1s ease-in-out infinite;
+    }
+    .urgency h3{font-size:24px;font-weight:900;color:var(--w);margin-bottom:12px;line-height:1.25}
+    .urgency h3 em{font-style:normal;color:#f87171}
+    .urgency-sub{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:28px;line-height:1.65}
+
+    .scarcity-numbers{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;
+      max-width:320px;margin:0 auto 28px;
+    }
+    .scarcity-num-block{
+      background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);
+      border-radius:14px;padding:16px 12px;text-align:center;
+    }
+    .scarcity-big{
+      font-size:32px;font-weight:900;line-height:1;color:#f87171;margin-bottom:4px;
+    }
+    .scarcity-label{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.3px}
+
+    .stock-wrap{max-width:300px;margin:0 auto 10px}
+    .stock-label-row{
+      display:flex;justify-content:space-between;align-items:center;
+      font-size:11px;color:rgba(255,255,255,.4);margin-bottom:10px;letter-spacing:.3px;
+    }
+    .stock-pct{font-weight:800;font-size:12px;color:#f87171}
+    .stock-track{
+      background:rgba(255,255,255,.06);border-radius:20px;height:12px;
+      overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.5);
+    }
+    .stock-fill{
+      height:100%;width:0%;border-radius:20px;
+      background:linear-gradient(90deg,#7f1d1d,#dc2626,#ef4444,#f87171,#ef4444);
+      background-size:300% 100%;
+      box-shadow:0 0 16px rgba(239,68,68,.6),0 0 32px rgba(220,38,38,.3);
+      animation:stock-shimmer 2s linear infinite;
+      transition:width 1.8s cubic-bezier(.25,.46,.45,.94);
+    }
+    @keyframes stock-shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+    .stock-sub{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      font-size:11px;color:rgba(239,68,68,.5);margin-top:8px;letter-spacing:.3px;
+    }
+
+    /* ── FAQ ── */
+    .faq{background:var(--g1)}
+    .faq-list{margin-top:28px}
+    .faq-item{border-bottom:1px solid var(--w1)}
+    .faq-q{
+      width:100%;background:none;border:none;color:var(--w9);
+      font-size:15px;font-weight:700;padding:20px 0;text-align:left;
+      cursor:pointer;display:flex;justify-content:space-between;
+      align-items:flex-start;gap:14px;font-family:inherit;line-height:1.4;
+    }
+    .faq-arrow{color:var(--ya);transition:transform .3s;flex-shrink:0;margin-top:2px}
+    .faq-q.open .faq-arrow{transform:rotate(180deg)}
+    .faq-a{font-size:14px;color:var(--w5);line-height:1.7;padding-bottom:20px;display:none}
+    .faq-a.open{display:block}
+    .faq-a strong{color:var(--w7)}
+
+    /* ── FINAL CTA ── */
+    .final{
+      background:radial-gradient(ellipse 120% 80% at 50% 50%,#0d2e1a,var(--void));
+      text-align:center;padding:64px 20px 130px;position:relative;overflow:hidden;
+    }
+    .final::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(255,215,0,.03),transparent);
+      animation:glow-breathe 5s ease-in-out infinite;
+    }
+    .final-inner{position:relative;z-index:1}
+    .final-trophy{
+      width:72px;height:72px;border-radius:50%;
+      background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.2);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 20px;
+    }
+
+    /* ── STICKY BAR ── */
+    .sticky{
+      position:fixed;bottom:0;left:0;right:0;
+      background:rgba(4,13,7,.92);
+      -webkit-backdrop-filter:blur(24px) saturate(180%);
+      backdrop-filter:blur(24px) saturate(180%);
+      border-top:1px solid rgba(255,215,0,.2);
+      padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+      z-index:999;display:flex;align-items:center;gap:10px;
+      transform:translateY(110%);
+      transition:transform .45s cubic-bezier(.25,.46,.45,.94);
+      box-shadow:0 -8px 40px rgba(0,0,0,.6);
+    }
+    .sticky.show{transform:translateY(0)}
+    .sticky-price{flex:0 0 auto;min-width:0}
+    .sticky-from{font-size:10px;color:var(--w3);text-decoration:line-through;white-space:nowrap}
+    .sticky-amount{
+      font-size:clamp(18px,5vw,22px);font-weight:900;line-height:1;
+      white-space:nowrap;
+      background:linear-gradient(135deg,#FFD700,#FFC107);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .sticky-inst{font-size:10px;color:var(--w3);margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+    .sticky-btn{
+      flex:1;
+      background:linear-gradient(135deg,#FFD700,#FFA500);
+      color:#0a1500;font-size:clamp(12px,3.5vw,14px);font-weight:900;
+      padding:15px 10px;border-radius:12px;
+      text-decoration:none;text-align:center;
+      text-transform:uppercase;letter-spacing:.5px;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      position:relative;overflow:hidden;white-space:nowrap;
+    }
+    .sticky-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 2.8s infinite;}
+
+    /* ── FOOTER ── */
+    footer{
+      background:var(--void);padding:28px 20px;text-align:center;
+      border-top:1px solid var(--w1);
+    }
+    footer p{font-size:11px;color:var(--w3);line-height:1.8}
+
+    /* ── TORCIDA BANNER ── */
+    .torcida-banner{
+      width:100%;max-width:420px;margin:0 auto 28px;
+      border-radius:18px;overflow:hidden;
+      border:1px solid rgba(74,222,128,.18);
+      box-shadow:0 0 40px rgba(74,222,128,.06),0 16px 48px rgba(0,0,0,.6);
+      position:relative;
+    }
+    .torcida-banner svg{display:block;width:100%;height:auto}
+
+    /* ── EXPANDABLE CARDS ── */
+    .exp-card{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,215,0,.15);
+      border-radius:16px;
+      margin-bottom:10px;
+      overflow:hidden;
+      cursor:pointer;
+      transition:border-color .3s,background .3s;
+    }
+    .exp-card:active{transform:scale(.99)}
+    .exp-card.open{
+      background:rgba(255,215,0,.06);
+      border-color:rgba(255,215,0,.35);
+    }
+    .exp-card-dark{background:rgba(0,0,0,.25)}
+    .exp-card-dark.open{background:rgba(255,215,0,.05)}
+    .exp-card-head{
+      display:flex;align-items:center;gap:12px;
+      padding:16px 18px;
+    }
+    .exp-card-icon{
+      width:36px;height:36px;flex-shrink:0;border-radius:10px;
+      background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.15);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .exp-card-title{
+      flex:1;font-size:14px;font-weight:800;color:var(--w9);line-height:1.35;
+    }
+    .exp-card-chevron{
+      flex-shrink:0;
+      transition:transform .35s cubic-bezier(.25,.46,.45,.94);
+    }
+    .exp-card.open .exp-card-chevron{transform:rotate(180deg)}
+    .exp-card-body{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .4s cubic-bezier(.25,.46,.45,.94),
+                 padding .35s ease;
+      padding:0 18px;
+    }
+    .exp-card-body p{
+      font-size:14px;color:var(--w7);line-height:1.7;
+      padding-bottom:18px;
+    }
+    .exp-card.open .exp-card-body{
+      max-height:200px;
+      padding:0 18px;
+    }
+
+    /* ── SCARCITY ARROWS ── */
+    .scarcity-arrow{
+      font-size:14px;font-weight:900;line-height:1;
+    }
+    .scarcity-arrow-up{
+      color:#4ade80;
+      animation:arrow-up-pulse 1.2s ease-in-out infinite;
+    }
+    .scarcity-arrow-down{
+      color:#f87171;
+      animation:arrow-down-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes arrow-up-pulse{
+      0%,100%{opacity:.3;transform:translateY(3px)}
+      50%{opacity:1;transform:translateY(-3px)}
+    }
+    @keyframes arrow-down-pulse{
+      0%,100%{opacity:.3;transform:translateY(-3px)}
+      50%{opacity:1;transform:translateY(3px)}
+    }
+
+    /* ── HERO FRAME (imagem + overlays animados simulando vídeo) ── */
+    .hero-video-wrap{
+      position:relative; margin:18px 0 16px;
+      border-radius:16px; overflow:hidden;
+      border:1px solid rgba(255,215,0,.25);
+      box-shadow:0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,215,0,.08) inset;
+      background:#000;
+      aspect-ratio:16/9;
+    }
+    .hero-frame-img{
+      display:block; width:100%; height:100%;
+      object-fit:cover;
+    }
+    /* LIVE badge no canto superior direito */
+    .hero-frame-live{
+      position:absolute; top:10px; right:10px; z-index:3;
+      background:linear-gradient(135deg,#dc2626,#b91c1c);
+      color:#fff; font-size:10px; font-weight:800; letter-spacing:1px;
+      padding:5px 10px; border-radius:6px;
+      display:inline-flex; align-items:center; gap:6px;
+      box-shadow:0 4px 12px rgba(220,38,38,.4);
+      animation: live-pulse 2.4s ease-in-out infinite;
+    }
+    .hero-frame-live-dot{
+      width:7px; height:7px; background:#fff; border-radius:50%;
+      animation: live-blink 1s ease-in-out infinite;
+    }
+    @keyframes live-pulse{
+      0%,100%{ transform:scale(1); }
+      50%   { transform:scale(1.06); }
+    }
+    /* Glow pulsante simulando luz da projeção */
+    .hero-frame-glow{
+      position:absolute; inset:0; pointer-events:none; z-index:2;
+      background:radial-gradient(ellipse 60% 50% at 50% 35%,
+                 rgba(45,223,114,.15) 0%,
+                 rgba(45,223,114,.05) 40%,
+                 transparent 70%);
+      mix-blend-mode:screen;
+      animation: glow-pulse 3.2s ease-in-out infinite;
+    }
+    @keyframes glow-pulse{
+      0%,100%{ opacity:.6; transform:scale(1); }
+      50%   { opacity:1; transform:scale(1.06); }
+    }
+    /* Scanline sutil (broadcast feel) */
+    .hero-frame-scan{
+      position:absolute; inset:0; pointer-events:none; z-index:3;
+      background:repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 2px,
+        rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 3px
+      );
+      mix-blend-mode:overlay;
+    }
+    .hero-frame-scan::after{
+      content:''; position:absolute; left:0; right:0; height:60px;
+      background:linear-gradient(to bottom, transparent, rgba(255,255,255,.04), transparent);
+      animation: scan-move 7s linear infinite;
+    }
+    @keyframes scan-move{
+      0%   { top:-60px; }
+      100% { top:100%; }
+    }
+    /* Confete caindo */
+    .hero-frame-confetti{
+      position:absolute; inset:0; pointer-events:none; z-index:4;
+      overflow:hidden;
+    }
+    .hero-frame-confetti span{
+      position:absolute; top:-20px; left:var(--x);
+      width:6px; height:11px; background:var(--c);
+      border-radius:1.5px;
+      animation: confetti-fall 4.5s linear infinite;
+      animation-delay:var(--d);
+      opacity:.85;
+    }
+    .hero-frame-confetti span:nth-child(even){
+      width:7px; height:7px; border-radius:50%;
+    }
+    @keyframes confetti-fall{
+      0%   { transform:translateY(0) rotate(0deg); opacity:0; }
+      8%   { opacity:1; }
+      90%  { opacity:.8; }
+      100% { transform:translateY(420px) rotate(720deg); opacity:0; }
+    }
+
+    /* ── SCROLL REVEAL — fade in + fade out (default = rise) ── */
+    .reveal{
+      opacity:0;
+      transform:translateY(36px);
+      transition:opacity .82s cubic-bezier(.25,.46,.45,.94),
+                 transform .82s cubic-bezier(.25,.46,.45,.94),
+                 filter .82s cubic-bezier(.25,.46,.45,.94);
+      filter:blur(4px);
+      will-change:opacity,transform,filter;
+    }
+    .reveal.is-visible{opacity:1;transform:translateY(0) translateX(0) scale(1) rotate(0deg);filter:blur(0)}
+    .reveal.is-leaving{opacity:0;transform:translateY(-24px);filter:blur(3px);}
+
+    /* ── VARIANTES por seção ── */
+
+    /* RISE: sobe de baixo (default) */
+    .fx-rise.reveal{ transform:translateY(40px); filter:blur(4px); }
+    .fx-rise.reveal.is-leaving{ transform:translateY(-28px); filter:blur(3px); }
+
+    /* DROP: cai de cima */
+    .fx-drop.reveal{ transform:translateY(-40px); filter:blur(4px); }
+    .fx-drop.reveal.is-leaving{ transform:translateY(28px); filter:blur(3px); }
+
+    /* SLIDE-LEFT: entra da direita, sai pra esquerda */
+    .fx-slide-left.reveal{ transform:translateX(48px); filter:blur(5px); }
+    .fx-slide-left.reveal.is-leaving{ transform:translateX(-48px); filter:blur(4px); }
+
+    /* SLIDE-RIGHT: entra da esquerda, sai pra direita */
+    .fx-slide-right.reveal{ transform:translateX(-48px); filter:blur(5px); }
+    .fx-slide-right.reveal.is-leaving{ transform:translateX(48px); filter:blur(4px); }
+
+    /* ZOOM-IN: cresce ao aparecer */
+    .fx-zoom-in.reveal{ transform:scale(.86); filter:blur(6px); }
+    .fx-zoom-in.reveal.is-leaving{ transform:scale(1.08); filter:blur(4px); }
+
+    /* ZOOM-OUT: encolhe ao aparecer (de longe pra perto) */
+    .fx-zoom-out.reveal{ transform:scale(1.12); filter:blur(6px); }
+    .fx-zoom-out.reveal.is-leaving{ transform:scale(.9); filter:blur(4px); }
+
+    /* TILT: inclina com leve subida */
+    .fx-tilt.reveal{ transform:translateY(28px) rotate(-2.5deg); filter:blur(4px); transform-origin:center bottom; }
+    .fx-tilt.reveal.is-leaving{ transform:translateY(-22px) rotate(2deg); filter:blur(3px); }
+
+    /* SOFT-FADE: só opacity + blur, sem deslocamento (calmo) */
+    .fx-soft.reveal{ transform:none; filter:blur(8px); transition-duration:1s; }
+    .fx-soft.reveal.is-leaving{ transform:none; filter:blur(6px); }
+
+    /* POP: zoom dramático com mola */
+    .fx-pop.reveal{
+      transform:scale(.7); filter:blur(6px);
+      transition:opacity .7s cubic-bezier(.34,1.56,.64,1),
+                 transform .7s cubic-bezier(.34,1.56,.64,1),
+                 filter .7s ease;
+    }
+    .fx-pop.reveal.is-leaving{ transform:scale(1.15); filter:blur(5px); }
+
+    /* SWING: gira a partir do canto */
+    .fx-swing.reveal{
+      transform:rotate(-6deg) translateY(40px) scale(.92);
+      transform-origin:top center;
+      filter:blur(5px);
+    }
+    .fx-swing.reveal.is-leaving{
+      transform:rotate(5deg) translateY(-30px) scale(.95);
+      filter:blur(4px);
+    }
+
+    /* FLIP-3D: vira em 3D no eixo X */
+    .fx-flip.reveal{
+      transform:perspective(900px) rotateX(-22deg) translateY(40px);
+      transform-origin:center bottom;
+      filter:blur(4px);
+    }
+    .fx-flip.reveal.is-leaving{
+      transform:perspective(900px) rotateX(18deg) translateY(-30px);
+      filter:blur(3px);
+    }
+
+    /* BURST: combinação scale + rotação leve */
+    .fx-burst.reveal{
+      transform:scale(.55) rotate(-8deg);
+      filter:blur(8px);
+      transition:opacity .9s cubic-bezier(.22,1,.36,1),
+                 transform .9s cubic-bezier(.22,1,.36,1),
+                 filter .9s ease;
+    }
+    .fx-burst.reveal.is-leaving{
+      transform:scale(1.2) rotate(6deg);
+      filter:blur(5px);
+    }
+
+    /* DIAGONAL: vem do canto superior-esquerdo */
+    .fx-diagonal.reveal{
+      transform:translate(-40px,40px) scale(.9);
+      filter:blur(5px);
+    }
+    .fx-diagonal.reveal.is-leaving{
+      transform:translate(40px,-30px) scale(.95);
+      filter:blur(4px);
+    }
+
+    /* ── OVERRIDE FINAL: garante reset total no is-visible (mais específico que variantes) ── */
+    .reveal.fx-rise.is-visible,
+    .reveal.fx-drop.is-visible,
+    .reveal.fx-slide-left.is-visible,
+    .reveal.fx-slide-right.is-visible,
+    .reveal.fx-zoom-in.is-visible,
+    .reveal.fx-zoom-out.is-visible,
+    .reveal.fx-tilt.is-visible,
+    .reveal.fx-soft.is-visible,
+    .reveal.fx-pop.is-visible,
+    .reveal.fx-swing.is-visible,
+    .reveal.fx-flip.is-visible,
+    .reveal.fx-burst.is-visible,
+    .reveal.fx-diagonal.is-visible{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1) rotate(0deg) perspective(900px) rotateX(0deg);
+      filter:blur(0);
+    }
+    .reveal-d1{transition-delay:.1s}
+    .reveal-d2{transition-delay:.2s}
+    .reveal-d3{transition-delay:.32s}
+    .reveal-d4{transition-delay:.44s}
+    .reveal-d5{transition-delay:.56s}
+
+    /* ── SECTION EDGE BLENDS ── */
+    section{position:relative}
+    section::after{
+      content:'';pointer-events:none;
+      position:absolute;bottom:-1px;left:0;right:0;height:64px;
+      background:inherit;
+      -webkit-mask:linear-gradient(to bottom,transparent,#000);
+      mask:linear-gradient(to bottom,transparent,#000);
+      z-index:1;
+    }
+    /* ═══════════════════ MOTION LAYER — pageviva ═══════════════════ */
+
+    /* Fixed motion canvas - sits above content, no interaction */
+    .motion-layer{
+      position:fixed; inset:0; pointer-events:none;
+      z-index:5; overflow:hidden;
+    }
+
+    /* — BANDEIRA DO BRASIL VOANDO — */
+    .flag-fly{
+      position:absolute; width:64px; height:44px;
+      filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));
+      will-change:transform, opacity;
+    }
+    .flag-fly svg{width:100%;height:100%;display:block}
+    .flag-fly .flag-cloth{
+      transform-origin:left center;
+      animation: flag-wave 1.1s ease-in-out infinite;
+    }
+    @keyframes flag-wave{
+      0%,100%{ transform: skewY(-4deg) scaleX(1); }
+      25%   { transform: skewY(2deg)  scaleX(.97); }
+      50%   { transform: skewY(5deg)  scaleX(1); }
+      75%   { transform: skewY(-2deg) scaleX(.98); }
+    }
+    @keyframes flag-cross-1{
+      0%   { transform: translate(-90px, 18vh) rotate(-12deg) scale(.85); opacity:0; filter:blur(6px); }
+      18%  { opacity:1; filter:blur(0); }
+      82%  { opacity:1; filter:blur(0); }
+      100% { transform: translate(110vw, 22vh) rotate(12deg) scale(1); opacity:0; filter:blur(6px); }
+    }
+    @keyframes flag-cross-2{
+      0%   { transform: translate(110vw, 62vh) rotate(15deg) scale(1.05); opacity:0; filter:blur(6px); }
+      18%  { opacity:1; filter:blur(0); }
+      82%  { opacity:1; filter:blur(0); }
+      100% { transform: translate(-90px, 55vh) rotate(-15deg) scale(.9); opacity:0; filter:blur(6px); }
+    }
+    @keyframes flag-cross-3{
+      0%   { transform: translate(-90px, 82vh) rotate(-8deg) scale(.75); opacity:0; filter:blur(6px); }
+      18%  { opacity:1; filter:blur(0); }
+      82%  { opacity:1; filter:blur(0); }
+      100% { transform: translate(110vw, 78vh) rotate(8deg) scale(.95); opacity:0; filter:blur(6px); }
+    }
+    .flag-fly-1{ animation: flag-cross-1 14s linear infinite; animation-delay:1.5s; }
+    .flag-fly-2{ animation: flag-cross-2 18s linear infinite; animation-delay:7s; }
+    .flag-fly-3{ animation: flag-cross-3 22s linear infinite; animation-delay:12s; }
+
+    /* — BOLAS DE FUTEBOL FLUTUANDO — */
+    .ball-float{
+      position:absolute; width:22px; height:22px;
+      opacity:.5; will-change:transform;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
+    }
+    @keyframes ball-rise{
+      0%   { transform: translate(0, 100vh) rotate(0deg); opacity:0; filter:blur(4px); }
+      15%  { opacity:.7; filter:blur(0); }
+      85%  { opacity:.5; filter:blur(0); }
+      100% { transform: translate(var(--drift,30px), -120px) rotate(720deg); opacity:0; filter:blur(4px); }
+    }
+    .ball-1{ left:8%;  animation: ball-rise 16s linear infinite; --drift:40px; animation-delay:0s; }
+    .ball-2{ left:88%; animation: ball-rise 19s linear infinite; --drift:-50px; animation-delay:6s; }
+    .ball-3{ left:42%; animation: ball-rise 22s linear infinite; --drift:80px;  animation-delay:11s; }
+    .ball-4{ left:68%; animation: ball-rise 17s linear infinite; --drift:-30px; animation-delay:3s; }
+
+    /* — TICKER AO VIVO no topo — */
+    .live-ticker{
+      position:relative;
+      background:linear-gradient(90deg, rgba(220,38,38,.95), rgba(180,30,30,.9));
+      color:#fff; font-size:13px; font-weight:800; letter-spacing:.5px;
+      padding:11px 0; overflow:hidden; white-space:nowrap;
+      border-bottom:1px solid rgba(0,0,0,.5);
+      box-shadow:0 2px 12px rgba(220,38,38,.25);
+    }
+    .live-ticker::before{
+      content:''; position:absolute; left:0; top:0; bottom:0; width:60px;
+      background:linear-gradient(90deg, rgba(220,38,38,1), transparent);
+      z-index:2; pointer-events:none;
+    }
+    .live-ticker::after{
+      content:''; position:absolute; right:0; top:0; bottom:0; width:60px;
+      background:linear-gradient(-90deg, rgba(180,30,30,1), transparent);
+      z-index:2; pointer-events:none;
+    }
+    .live-ticker-track{
+      display:inline-flex; gap:32px; align-items:center;
+      animation: ticker-scroll 55s linear infinite;
+      padding-left:100%;
+    }
+    .live-ticker-track span{
+      display:inline-flex;align-items:center;gap:6px;
+      animation: ticker-item-fade 8s ease-in-out infinite;
+    }
+    .live-ticker-track span:nth-child(odd){ animation-delay: -2s; }
+    .live-ticker-track span:nth-child(even){ animation-delay: -5s; }
+    @keyframes ticker-item-fade{
+      0%,100%{ opacity:.85; }
+      50%   { opacity:1; }
+    }
+    .live-ticker-dot{
+      display:inline-block; width:7px; height:7px; background:#fff; border-radius:50%;
+      animation: live-blink 1s ease-in-out infinite;
+    }
+    @keyframes ticker-scroll{
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes live-blink{
+      0%,100%{ opacity:1; transform:scale(1); }
+      50%    { opacity:.4; transform:scale(.7); }
+    }
+
+    /* — CONFETE BURST (JS-triggered) — */
+    .confetti-piece{
+      position:fixed; width:8px; height:14px; pointer-events:none;
+      z-index:9999; will-change:transform, opacity;
+    }
+
+    /* — PULSE no preço — */
+    .price-pulse{
+      animation: price-breathe 2.6s ease-in-out infinite;
+    }
+    @keyframes price-breathe{
+      0%,100%{ transform:scale(1); filter:drop-shadow(0 0 0 rgba(255,215,0,0)); }
+      50%    { transform:scale(1.035); filter:drop-shadow(0 0 16px rgba(255,215,0,.45)); }
+    }
+
+    /* — TAP RIPPLE em cards expansivos — */
+    .ripple{
+      position:absolute; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,215,0,.35) 0%, transparent 65%);
+      pointer-events:none; transform:translate(-50%,-50%) scale(0);
+      animation: ripple-out .6s ease-out forwards;
+    }
+    @keyframes ripple-out{
+      to{ transform:translate(-50%,-50%) scale(8); opacity:0; }
+    }
+
+    /* — FAÍSCAS douradas em texto destacado — */
+    .spark-em em, .spark-em strong{
+      position:relative;
+    }
+
+    /* Performance: respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .flag-fly, .ball-float, .live-ticker-track, .price-pulse{
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ TICKER AO VIVO ═══════════════════ -->
+<div class="live-ticker" aria-hidden="true">
+  <div class="live-ticker-track">
+    <span>📦 ENVIO IMEDIATO</span>
+    <span>💳 12X NO CARTÃO</span>
+    <span>🚚 FRETE GRÁTIS</span>
+    <span>🛡️ COMPRA SEGURA</span>
+    <span>🏆 ENTREGA RÁPIDA ANTES DOS JOGOS</span>
+    <span>⚠️ ESTOQUE REDUZIDO PARA A COPA</span>
+    <span>📦 ENVIO IMEDIATO</span>
+    <span>💳 12X NO CARTÃO</span>
+    <span>🚚 FRETE GRÁTIS</span>
+    <span>🛡️ COMPRA SEGURA</span>
+    <span>🏆 ENTREGA RÁPIDA ANTES DOS JOGOS</span>
+    <span>⚠️ ESTOQUE REDUZIDO PARA A COPA</span>
+    <span>📦 ENVIO IMEDIATO</span>
+    <span>💳 12X NO CARTÃO</span>
+    <span>🚚 FRETE GRÁTIS</span>
+    <span>🛡️ COMPRA SEGURA</span>
+    <span>🏆 ENTREGA RÁPIDA ANTES DOS JOGOS</span>
+    <span>⚠️ ESTOQUE REDUZIDO PARA A COPA</span>
+  </div>
+</div>
+
+
+<!-- ════════════════════════ TOPBAR -->
+<!-- ════════════════════════ COUNTDOWN -->
+<div class="countdown-bar">
+  <p>A <strong>Copa do Mundo começa em</strong></p>
+  <div class="countdown-digits">
+    <div class="cd-block">
+      <div class="cd-num" id="cd-days">--</div>
+      <div class="cd-label">Dias</div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-num" id="cd-hours">--</div>
+      <div class="cd-label">Horas</div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-num" id="cd-min">--</div>
+      <div class="cd-label">Min</div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-num" id="cd-sec">--</div>
+      <div class="cd-label">Seg</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-beams"></div>
+  <canvas id="particles"></canvas>
+  <div class="hero-fog"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      Edição Limitada · Copa 2026
+    </div>
+
+    <h1>
+      Transforme qualquer<br>
+      <em>parede em uma arena!</em>
+    </h1>
+
+    <p class="hero-sub">
+      Viva cada jogo como se estivesse no estádio —<br><strong>sem sair de casa.</strong>
+    </p>
+
+    <div class="hero-video-wrap">
+      <video class="hero-frame-img" autoplay muted loop playsinline preload="auto">
+        <source src="arena-max-principal.mp4" type="video/mp4">
+      </video>
+      <!-- Overlay LIVE badge no canto -->
+      <div class="hero-frame-live">
+        <span class="hero-frame-live-dot"></span> AO VIVO
+      </div>
+      <!-- Brilho pulsante da projeção -->
+      <div class="hero-frame-glow"></div>
+      <!-- Scanline sutil (TV broadcast feel) -->
+      <div class="hero-frame-scan"></div>
+      <!-- Confete caindo -->
+      <div class="hero-frame-confetti">
+        <span style="--x:8%;--d:0s;--c:#FFD700"></span>
+        <span style="--x:18%;--d:1.2s;--c:#22c55e"></span>
+        <span style="--x:28%;--d:.4s;--c:#FEDF00"></span>
+        <span style="--x:38%;--d:2.1s;--c:#ef4444"></span>
+        <span style="--x:48%;--d:.8s;--c:#FFD700"></span>
+        <span style="--x:58%;--d:1.7s;--c:#22c55e"></span>
+        <span style="--x:68%;--d:.2s;--c:#FFD700"></span>
+        <span style="--x:78%;--d:2.4s;--c:#FEDF00"></span>
+        <span style="--x:88%;--d:1.0s;--c:#22c55e"></span>
+        <span style="--x:14%;--d:2.8s;--c:#ef4444"></span>
+        <span style="--x:54%;--d:3.5s;--c:#FFD700"></span>
+        <span style="--x:84%;--d:3.1s;--c:#FEDF00"></span>
+      </div>
+    </div>
+    <div class="microcopy">
+      <span class="microcopy-item"><i data-lucide="truck" class="ic-xs ic-w5"></i> Frete grátis</span>
+      <span style="color:var(--w1)">|</span>
+      <span class="microcopy-item"><i data-lucide="credit-card" class="ic-xs ic-w5"></i> Até 12x no cartão</span>
+      <span style="color:var(--w1)">|</span>
+      <span class="microcopy-item"><i data-lucide="shield-check" class="ic-xs ic-w5"></i> Compra segura</span>
+    </div>
+  </div>
+
+  <!-- scroll indicator -->
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <i data-lucide="chevron-down" class="ic-sm" style="stroke:rgba(255,215,0,.5)"></i>
+  </div>
+</section>
+
+<!-- ════════════════════════ HERO CHECKS (below fold) -->
+<div class="hero-below">
+  <ul class="hero-checks">
+    <li class="hero-check">
+      <div class="check-circle-wrap"><i data-lucide="check" class="ic-xs ic-g"></i></div>
+      Tela de até 120 polegadas em qualquer parede
+    </li>
+    <li class="hero-check">
+      <div class="check-circle-wrap"><i data-lucide="check" class="ic-xs ic-g"></i></div>
+      Pronto em 60 segundos — sem instalação
+    </li>
+    <li class="hero-check">
+      <div class="check-circle-wrap"><i data-lucide="check" class="ic-xs ic-g"></i></div>
+      Leve, portátil — leva pra onde a torcida estiver
+    </li>
+    <li class="hero-check">
+      <div class="check-circle-wrap"><i data-lucide="check" class="ic-xs ic-g"></i></div>
+      Copa, filmes, séries, games — tudo em tela gigante
+    </li>
+    <li class="hero-check">
+      <div class="check-circle-wrap"><i data-lucide="truck" class="ic-xs ic-g"></i></div>
+      <strong>Frete grátis para todo o Brasil</strong>
+    </li>
+  </ul>
+</div>
+
+<!-- ════════════════════════ TRUST -->
+<div class="trust" role="list">
+  <div class="trust-item" role="listitem">
+    <i data-lucide="shield-check" class="ic-md ic-y"></i>
+    <span class="trust-label">Compra Segura</span>
+  </div>
+  <div class="trust-item" role="listitem">
+    <i data-lucide="truck" class="ic-md ic-y"></i>
+    <span class="trust-label">Frete Grátis</span>
+  </div>
+  <div class="trust-item" role="listitem">
+    <i data-lucide="credit-card" class="ic-md ic-y"></i>
+    <span class="trust-label">12x Cartão</span>
+  </div>
+  <div class="trust-item" role="listitem">
+    <i data-lucide="package" class="ic-md ic-y"></i>
+    <span class="trust-label">Envio Rápido</span>
+  </div>
+</div>
+
+<!-- ════════════════════════ PROBLEMA -->
+<section class="problem">
+  <!-- Banner: torcida em casa com mini projetor -->
+  <div class="torcida-banner" aria-label="Torcida assistindo Copa em casa com mini projetor">
+    <svg viewBox="0 0 380 270" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <linearGradient id="bg-room" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#071a0c"/>
+          <stop offset="100%" stop-color="#020804"/>
+        </linearGradient>
+        <linearGradient id="field-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0c5226"/>
+          <stop offset="50%" stop-color="#0f6b30"/>
+          <stop offset="100%" stop-color="#0c5226"/>
+        </linearGradient>
+        <radialGradient id="field-shine" cx="40%" cy="30%" r="60%">
+          <stop offset="0%" stop-color="#fff" stop-opacity=".09"/>
+          <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="beam-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f5d000" stop-opacity="0"/>
+          <stop offset="35%" stop-color="#f5d000" stop-opacity=".06"/>
+          <stop offset="100%" stop-color="#f5d000" stop-opacity=".2"/>
+        </linearGradient>
+        <radialGradient id="screen-spill" cx="50%" cy="0%" r="100%">
+          <stop offset="0%" stop-color="#28ff6a" stop-opacity=".32"/>
+          <stop offset="45%" stop-color="#28ff6a" stop-opacity=".12"/>
+          <stop offset="100%" stop-color="#28ff6a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+          <stop offset="52%" stop-color="transparent"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".85"/>
+        </radialGradient>
+        <filter id="fx-xs"><feGaussianBlur stdDeviation="1"/></filter>
+        <filter id="fx-sm"><feGaussianBlur stdDeviation="2"/></filter>
+        <filter id="fx-md"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="fx-bloom">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="fx-glow">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="sc"><rect x="16" y="5" width="348" height="120" rx="5"/></clipPath>
+        <clipPath id="all"><rect width="380" height="270"/></clipPath>
+      </defs>
+
+      <g clip-path="url(#all)">
+
+      <!-- ROOM -->
+      <rect width="380" height="270" fill="url(#bg-room)"/>
+      <rect x="0" y="0" width="380" height="130" fill="#050f08"/>
+      <rect x="0" y="200" width="380" height="70" fill="#020705"/>
+
+      <!-- SCREEN FRAME -->
+      <rect x="10" y="1" width="360" height="128" rx="7" fill="#000" opacity=".65"/>
+      <!-- FIELD -->
+      <rect x="16" y="5" width="348" height="120" rx="5" fill="url(#field-grad)"/>
+
+      <!-- FIELD STRIPES — alternating light/dark bands like real broadcast -->
+      <g clip-path="url(#sc)">
+        <rect x="16" y="5"   width="348" height="12" fill="#0d5a28" opacity=".7"/>
+        <rect x="16" y="29"  width="348" height="12" fill="#0d5a28" opacity=".7"/>
+        <rect x="16" y="53"  width="348" height="12" fill="#0d5a28" opacity=".7"/>
+        <rect x="16" y="77"  width="348" height="12" fill="#0d5a28" opacity=".7"/>
+        <rect x="16" y="101" width="348" height="12" fill="#0d5a28" opacity=".7"/>
+      </g>
+
+      <!-- FIELD MARKINGS -->
+      <g clip-path="url(#sc)" stroke="rgba(255,255,255,.38)" stroke-width="1.3" fill="none">
+        <rect x="25" y="9" width="330" height="112"/>
+        <line x1="190" y1="9" x2="190" y2="121"/>
+        <ellipse cx="190" cy="65" rx="29" ry="25"/>
+        <circle cx="190" cy="65" r="2.2" fill="rgba(255,255,255,.65)" stroke="none"/>
+        <!-- left penalty box -->
+        <rect x="25" y="28" width="72" height="74"/>
+        <rect x="25" y="42" width="32" height="46"/>
+        <!-- right penalty box -->
+        <rect x="283" y="28" width="72" height="74"/>
+        <rect x="323" y="42" width="32" height="46"/>
+        <!-- penalty arcs -->
+        <path d="M97 36 Q122 65 97 94" stroke-dasharray="3,2.5"/>
+        <path d="M283 36 Q258 65 283 94" stroke-dasharray="3,2.5"/>
+        <!-- corners -->
+        <path d="M25 9 q6,0 6,6"/>
+        <path d="M355 9 q-6,0 -6,6"/>
+        <path d="M25 121 q6,0 6,-6"/>
+        <path d="M355 121 q-6,0 -6,-6"/>
+        <!-- penalty spots -->
+        <circle cx="72" cy="65" r="2" fill="rgba(255,255,255,.55)" stroke="none"/>
+        <circle cx="308" cy="65" r="2" fill="rgba(255,255,255,.55)" stroke="none"/>
+      </g>
+
+      <!-- GOALS -->
+      <rect x="16" y="48" width="9" height="34" rx="1.5" fill="rgba(255,255,255,.45)" clip-path="url(#sc)"/>
+      <rect x="355" y="48" width="9" height="34" rx="1.5" fill="rgba(255,255,255,.45)" clip-path="url(#sc)"/>
+      <!-- goal nets -->
+      <g clip-path="url(#sc)" stroke="rgba(255,255,255,.14)" stroke-width=".7" fill="none">
+        <line x1="16" y1="54" x2="8"  y2="51"/>
+        <line x1="16" y1="62" x2="8"  y2="62"/>
+        <line x1="16" y1="70" x2="8"  y2="70"/>
+        <line x1="16" y1="78" x2="8"  y2="78"/>
+        <line x1="8"  y1="51" x2="8"  y2="79"/>
+        <line x1="364" y1="54" x2="372" y2="51"/>
+        <line x1="364" y1="62" x2="372" y2="62"/>
+        <line x1="364" y1="70" x2="372" y2="70"/>
+        <line x1="364" y1="78" x2="372" y2="78"/>
+        <line x1="372" y1="51" x2="372" y2="79"/>
+      </g>
+
+      <!-- PLAYERS on field — full silhouettes with head+torso+arms+legs -->
+      <g clip-path="url(#sc)">
+        <!-- BRA GK (orange) -->
+        <g fill="#e55a00" opacity=".92">
+          <circle cx="34" cy="58" r="3.2"/>
+          <rect x="31" y="61" width="6" height="9" rx="2"/>
+          <path d="M31,64 Q26,62 23,60" stroke="#e55a00" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M37,64 Q42,62 45,60" stroke="#e55a00" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <line x1="32" y1="70" x2="30" y2="79" stroke="#e55a00" stroke-width="3" stroke-linecap="round"/>
+          <line x1="36" y1="70" x2="38" y2="79" stroke="#e55a00" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <!-- BRA DEF -->
+        <g fill="#FFDF00" opacity=".88">
+          <circle cx="86" cy="50" r="3"/>
+          <rect x="83.5" y="53" width="5.5" height="8.5" rx="1.5"/>
+          <path d="M83.5,56 Q79,54 76,53" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <path d="M89,56 Q93,54 96,53" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="84.5" y1="61.5" x2="82" y2="70" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="88" y1="61.5" x2="90" y2="70" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+        </g>
+        <!-- BRA MID (running, arms in stride) -->
+        <g fill="#FFDF00" opacity=".85">
+          <circle cx="190" cy="69" r="3.2"/>
+          <rect x="187.5" y="72" width="5.5" height="9" rx="1.5"/>
+          <path d="M187.5,75 Q183,72 180,70" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <path d="M193,75 Q197,73 200,74" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="188.5" y1="81" x2="185" y2="90" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="192" y1="81" x2="196" y2="89" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+        </g>
+        <!-- BRA ATK near right box -->
+        <g fill="#FFDF00" opacity=".9">
+          <circle cx="286" cy="58" r="3.2"/>
+          <rect x="283.5" y="61" width="5.5" height="9" rx="1.5"/>
+          <path d="M283.5,64 Q279,63 276,65" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <path d="M289,64 Q293,62 296,60" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="284.5" y1="70" x2="282" y2="79" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="288" y1="70" x2="290" y2="79" stroke="#FFDF00" stroke-width="2.8" stroke-linecap="round"/>
+        </g>
+        <!-- ARG DEF (white) -->
+        <g fill="rgba(255,255,255,.82)">
+          <circle cx="304" cy="72" r="3"/>
+          <rect x="301.5" y="75" width="5.5" height="8.5" rx="1.5"/>
+          <path d="M301.5,78 Q297,77 294,79" stroke="rgba(255,255,255,.82)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+          <path d="M307,78 Q311,76 314,75" stroke="rgba(255,255,255,.82)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+          <line x1="302.5" y1="83.5" x2="300" y2="92" stroke="rgba(255,255,255,.82)" stroke-width="2.7" stroke-linecap="round"/>
+          <line x1="306" y1="83.5" x2="308" y2="92" stroke="rgba(255,255,255,.82)" stroke-width="2.7" stroke-linecap="round"/>
+        </g>
+        <!-- ARG GK -->
+        <g fill="rgba(255,255,255,.72)">
+          <circle cx="350" cy="64" r="3"/>
+          <rect x="347.5" y="67" width="5.5" height="8" rx="1.5"/>
+          <path d="M347.5,70 Q343,68 341,67" stroke="rgba(255,255,255,.72)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+          <path d="M353,70 Q357,72 359,74" stroke="rgba(255,255,255,.72)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+          <line x1="348.5" y1="75" x2="346" y2="84" stroke="rgba(255,255,255,.72)" stroke-width="2.7" stroke-linecap="round"/>
+          <line x1="352" y1="75" x2="354" y2="83" stroke="rgba(255,255,255,.72)" stroke-width="2.7" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- BALL with markings -->
+      <g clip-path="url(#sc)">
+        <circle cx="268" cy="60" r="5" fill="white" opacity=".95"/>
+        <circle cx="268" cy="60" r="5" fill="none" stroke="#bbb" stroke-width=".5"/>
+        <circle cx="268" cy="60" r="1.8" fill="#1a1a1a" opacity=".55"/>
+        <path d="M268 55.5 L265.8 58.2 L267 61 L269 61 L270.2 58.2 Z" fill="#1a1a1a" opacity=".38"/>
+      </g>
+
+      <!-- screen glare/shine -->
+      <rect x="16" y="5" width="348" height="120" rx="5" fill="url(#field-shine)"/>
+
+      <!-- SCOREBOARD HUD -->
+      <rect x="20" y="9" width="96" height="23" rx="4" fill="rgba(0,0,0,.8)"/>
+      <rect x="20" y="9" width="96" height="23" rx="4" stroke="rgba(255,215,0,.4)" stroke-width=".8" fill="none"/>
+      <!-- BRA flag -->
+      <rect x="25" y="14" width="13" height="9" rx="1.5" fill="#009c3b"/>
+      <polygon points="26.5,18.5 30.5,14.5 34.5,18.5 30.5,22.5" fill="#FEDF00"/>
+      <circle cx="30.5" cy="18.5" r="2" fill="#002776"/>
+      <!-- labels & score -->
+      <text x="41" y="24" font-size="8" fill="white" font-family="Arial,sans-serif" font-weight="700" letter-spacing=".6">BRA</text>
+      <text x="64" y="25" font-size="10" fill="#FFD700" font-family="Arial,sans-serif" font-weight="900">2–1</text>
+      <text x="85" y="24" font-size="8" fill="rgba(255,255,255,.75)" font-family="Arial,sans-serif" font-weight="700" letter-spacing=".6">ARG</text>
+      <!-- LIVE badge -->
+      <rect x="153" y="9" width="56" height="17" rx="3.5" fill="#dc2626"/>
+      <circle cx="161" cy="17.5" r="3" fill="white" opacity=".92"/>
+      <text x="179" y="22" font-size="8" fill="white" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" letter-spacing=".4">74' AO VIVO</text>
+
+      <!-- screen bottom bloom -->
+      <rect x="16" y="118" width="348" height="18" rx="4" fill="#28ff6a" opacity=".2" filter="url(#fx-sm)"/>
+
+      <!-- PROJECTOR BEAM -->
+      <polygon points="190,162 92,128 288,128" fill="url(#beam-grad)"/>
+      <!-- dust in beam -->
+      <g filter="url(#fx-xs)" opacity=".55">
+        <circle cx="150" cy="147" r="1.3" fill="#f5d000"/>
+        <circle cx="224" cy="134" r="1" fill="#f5d000"/>
+        <circle cx="174" cy="141" r=".8" fill="#fff"/>
+        <circle cx="210" cy="149" r="1.2" fill="#f5d000"/>
+        <circle cx="166" cy="131" r=".9" fill="#fff"/>
+        <circle cx="236" cy="143" r=".7" fill="#f5d000"/>
+        <circle cx="141" cy="137" r="1" fill="#fff"/>
+      </g>
+
+      <!-- MINI PROJECTOR -->
+      <g filter="url(#fx-glow)">
+        <rect x="168" y="151" width="44" height="22" rx="6" fill="#0c1c0f" stroke="#c8a800" stroke-width="1.3"/>
+        <!-- vent slots -->
+        <line x1="194" y1="155" x2="194" y2="169" stroke="rgba(200,168,0,.28)" stroke-width=".9"/>
+        <line x1="198" y1="155" x2="198" y2="169" stroke="rgba(200,168,0,.28)" stroke-width=".9"/>
+        <line x1="202" y1="155" x2="202" y2="169" stroke="rgba(200,168,0,.28)" stroke-width=".9"/>
+        <line x1="206" y1="155" x2="206" y2="169" stroke="rgba(200,168,0,.28)" stroke-width=".9"/>
+        <!-- lens rings -->
+        <circle cx="181" cy="162" r="8" fill="#08120a" stroke="#c8a800" stroke-width="1.3"/>
+        <circle cx="181" cy="162" r="5.5" fill="#060e08"/>
+        <circle cx="181" cy="162" r="3.5" fill="#0a1a0d"/>
+        <!-- lens glow -->
+        <circle cx="181" cy="162" r="2.2" fill="#FFD700" opacity=".95" filter="url(#fx-bloom)"/>
+        <circle cx="180" cy="161" r=".9" fill="white" opacity=".9"/>
+        <!-- status LEDs -->
+        <circle cx="203" cy="157" r="2.2" fill="#22c55e" opacity=".95" filter="url(#fx-xs)"/>
+        <circle cx="208" cy="157" r="1.4" fill="#22c55e" opacity=".4"/>
+        <!-- branding stripe -->
+        <rect x="170" y="165" width="18" height="3.5" rx="1.5" fill="rgba(200,168,0,.22)"/>
+      </g>
+      <ellipse cx="190" cy="177" rx="28" ry="5" fill="rgba(0,0,0,.5)" filter="url(#fx-sm)"/>
+
+      <!-- SCREEN LIGHT spill over scene -->
+      <rect x="0" y="122" width="380" height="150" fill="url(#screen-spill)"/>
+
+      <!-- CROWD BASE -->
+      <rect x="0" y="220" width="380" height="50" fill="#020604"/>
+      <rect x="4" y="216" width="372" height="10" rx="5" fill="#050e08"/>
+
+      <!-- P1: far left, STANDING, both arms up celebrating -->
+      <g fill="#071207">
+        <line x1="33" y1="215" x2="31" y2="248" stroke="#071207" stroke-width="10" stroke-linecap="round"/>
+        <line x1="47" y1="215" x2="49" y2="248" stroke="#071207" stroke-width="10" stroke-linecap="round"/>
+        <rect x="26" y="183" width="34" height="38" rx="9"/>
+        <rect x="33" y="175" width="12" height="14" rx="6"/>
+        <ellipse cx="39" cy="163" rx="15" ry="17"/>
+        <path d="M26,193 Q11,172 7,151" stroke="#071207" stroke-width="13" stroke-linecap="round" fill="none"/>
+        <ellipse cx="6" cy="149" rx="7" ry="6"/>
+        <path d="M60,193 Q74,172 78,151" stroke="#071207" stroke-width="13" stroke-linecap="round" fill="none"/>
+        <ellipse cx="79" cy="149" rx="7" ry="6"/>
+      </g>
+      <ellipse cx="39" cy="161" rx="17" ry="14" fill="rgba(30,215,100,.22)" filter="url(#fx-sm)"/>
+
+      <!-- P2: center-left, SITTING, leaning forward, arm raised -->
+      <g fill="#050e07">
+        <line x1="93" y1="215" x2="88" y2="240" stroke="#050e07" stroke-width="12" stroke-linecap="round" transform="rotate(20 90 228)"/>
+        <line x1="117" y1="215" x2="122" y2="240" stroke="#050e07" stroke-width="12" stroke-linecap="round" transform="rotate(-15 120 228)"/>
+        <rect x="86" y="182" width="40" height="37" rx="9"/>
+        <rect x="101" y="174" width="12" height="14" rx="6"/>
+        <ellipse cx="107" cy="161" rx="16" ry="17" transform="rotate(-6 107 161)"/>
+        <path d="M86,199 Q73,210 68,220" stroke="#050e07" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M126,191 Q140,173 147,157" stroke="#050e07" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <ellipse cx="148" cy="155" rx="7" ry="6"/>
+      </g>
+      <ellipse cx="107" cy="159" rx="18" ry="15" fill="rgba(30,215,100,.26)" filter="url(#fx-sm)"/>
+
+      <!-- P3: CENTER, STANDING tallest, both arms way up -->
+      <g fill="#08160a">
+        <line x1="174" y1="217" x2="172" y2="252" stroke="#08160a" stroke-width="11" stroke-linecap="round"/>
+        <line x1="192" y1="217" x2="194" y2="252" stroke="#08160a" stroke-width="11" stroke-linecap="round"/>
+        <rect x="164" y="176" width="42" height="46" rx="10"/>
+        <rect x="178" y="167" width="13" height="15" rx="6"/>
+        <ellipse cx="184" cy="153" rx="18" ry="19"/>
+        <path d="M164,189 Q146,164 138,142" stroke="#08160a" stroke-width="14" stroke-linecap="round" fill="none"/>
+        <ellipse cx="136" cy="139" rx="8" ry="7"/>
+        <path d="M206,189 Q224,164 232,142" stroke="#08160a" stroke-width="14" stroke-linecap="round" fill="none"/>
+        <ellipse cx="234" cy="139" rx="8" ry="7"/>
+      </g>
+      <ellipse cx="184" cy="151" rx="20" ry="17" fill="rgba(30,215,100,.32)" filter="url(#fx-sm)"/>
+      <!-- Brazilian flag in right hand -->
+      <g transform="translate(234,139) rotate(-28)">
+        <line x1="0" y1="0" x2="0" y2="-26" stroke="rgba(255,255,255,.55)" stroke-width="1.8"/>
+        <rect x="0" y="-26" width="20" height="13" rx="2" fill="#009c3b"/>
+        <polygon points="1.5,-20 6.5,-25.5 11.5,-20 6.5,-14.5" fill="#FEDF00"/>
+        <circle cx="6.5" cy="-20" r="2.5" fill="#002776"/>
+      </g>
+
+      <!-- P4: center-right, SITTING, phone recording -->
+      <g fill="#050e07">
+        <line x1="257" y1="215" x2="252" y2="240" stroke="#050e07" stroke-width="12" stroke-linecap="round" transform="rotate(18 254 228)"/>
+        <line x1="281" y1="215" x2="286" y2="240" stroke="#050e07" stroke-width="12" stroke-linecap="round" transform="rotate(-18 284 228)"/>
+        <rect x="251" y="182" width="40" height="37" rx="9"/>
+        <rect x="265" y="174" width="12" height="14" rx="6"/>
+        <ellipse cx="271" cy="161" rx="16" ry="17" transform="rotate(4 271 161)"/>
+        <!-- arms holding phone up -->
+        <path d="M251,198 Q255,188 259,181" stroke="#050e07" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M291,198 Q287,188 283,181" stroke="#050e07" stroke-width="12" stroke-linecap="round" fill="none"/>
+      </g>
+      <!-- phone screen -->
+      <rect x="257" y="170" width="25" height="15" rx="3" fill="#090909" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+      <rect x="259" y="172" width="21" height="11" rx="1.5" fill="rgba(30,215,100,.6)"/>
+      <circle cx="276" cy="177.5" r="2" fill="#ef4444" opacity=".95"/>
+      <ellipse cx="271" cy="159" rx="17" ry="14" fill="rgba(30,215,100,.2)" filter="url(#fx-sm)"/>
+
+      <!-- P5: far right, STANDING, one arm raised -->
+      <g fill="#071207">
+        <line x1="330" y1="215" x2="328" y2="248" stroke="#071207" stroke-width="10" stroke-linecap="round"/>
+        <line x1="344" y1="215" x2="346" y2="248" stroke="#071207" stroke-width="10" stroke-linecap="round"/>
+        <rect x="323" y="183" width="34" height="38" rx="9"/>
+        <rect x="331" y="175" width="12" height="14" rx="6"/>
+        <ellipse cx="337" cy="163" rx="15" ry="17"/>
+        <path d="M323,193 Q309,174 303,155" stroke="#071207" stroke-width="13" stroke-linecap="round" fill="none"/>
+        <ellipse cx="302" cy="153" rx="7" ry="6"/>
+        <path d="M357,193 Q366,207 370,222" stroke="#071207" stroke-width="12" stroke-linecap="round" fill="none"/>
+      </g>
+      <ellipse cx="337" cy="161" rx="16" ry="14" fill="rgba(30,215,100,.2)" filter="url(#fx-sm)"/>
+
+      <!-- CELEBRATION PARTICLES / confetti -->
+      <g>
+        <rect x="62"  y="138" width="5" height="8" rx="2" fill="#FFD700" transform="rotate(28 64 142)"  opacity=".85"/>
+        <rect x="118" y="127" width="4" height="7" rx="1.5" fill="#22c55e" transform="rotate(-32 120 130)" opacity=".75"/>
+        <rect x="246" y="126" width="5" height="8" rx="2" fill="#FFD700" transform="rotate(16 248 130)"  opacity=".85"/>
+        <rect x="312" y="133" width="4" height="7" rx="1.5" fill="#22c55e" transform="rotate(-22 314 136)" opacity=".75"/>
+        <rect x="152" y="120" width="4" height="6" rx="1.5" fill="#ef4444" transform="rotate(38 154 123)" opacity=".7"/>
+        <rect x="220" y="133" width="4" height="6" rx="1.5" fill="#FFD700" transform="rotate(-18 222 136)" opacity=".7"/>
+        <circle cx="86"  cy="146" r="2.5" fill="#FFD700" opacity=".75"/>
+        <circle cx="298" cy="142" r="2.2" fill="#22c55e" opacity=".65"/>
+        <circle cx="158" cy="130" r="1.8" fill="#FFD700" opacity=".6"/>
+        <circle cx="216" cy="140" r="2.2" fill="#ef4444" opacity=".55"/>
+        <circle cx="134" cy="143" r="1.5" fill="#FFD700" opacity=".65"/>
+        <circle cx="258" cy="130" r="1.8" fill="#22c55e" opacity=".55"/>
+        <rect x="178" y="118" width="3" height="6" rx="1.5" fill="#ef4444" transform="rotate(45 179 121)" opacity=".6"/>
+        <rect x="330" y="126" width="3" height="5" rx="1" fill="#FFD700" transform="rotate(-30 331 128)" opacity=".6"/>
+      </g>
+
+      <!-- VIGNETTE + ceiling/floor darkening -->
+      <rect width="380" height="270" fill="url(#vignette)"/>
+      <rect x="0" y="0" width="380" height="24" fill="rgba(0,0,0,.55)"/>
+      <rect x="0" y="248" width="380" height="22" fill="rgba(0,0,0,.5)"/>
+
+      </g>
+    </svg>
+  </div>
+  <div class="eyebrow">A torcida faz diferença</div>
+  <h2 class="stitle ta-c">
+    A sua energia<br><em>impacta no resultado.</em>
+  </h2>
+  <div class="sdivider"></div>
+
+  <div class="exp-card" onclick="expToggle(this)">
+    <div class="exp-card-head">
+      <div class="exp-card-icon"><i data-lucide="zap" class="ic-sm ic-y"></i></div>
+      <span class="exp-card-title">sua torcida chega lá no campo</span>
+      <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+    </div>
+    <div class="exp-card-body">
+      <p>Não é papo — cada grito, cada arrepio, cada gol gritado com o máximo de intensidade alimenta a força do time. <strong>Torcer de verdade faz diferença.</strong></p>
+    </div>
+  </div>
+
+  <div class="exp-card" onclick="expToggle(this)">
+    <div class="exp-card-head">
+      <div class="exp-card-icon"><i data-lucide="trophy" class="ic-sm ic-y"></i></div>
+      <span class="exp-card-title">torça do jeito que o Brasil merece</span>
+      <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+    </div>
+    <div class="exp-card-body">
+      <p>Torcida apagada não leva ninguém a lugar nenhum. Cria o ambiente certo, chama o pessoal e vai com tudo. <strong>A vitória começa em casa.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ EXPERIÊNCIA -->
+<section class="experience">
+  <div class="eyebrow">A Experiência</div>
+  <h2 class="stitle ta-c">
+    Não assista a Copa<br><em>VIVA ELA!</em>
+  </h2>
+  <div class="sdivider"></div>
+  <p class="sbody ta-c">
+    <strong>Sala escura. Jogo gigante na parede. Amigos reunidos.</strong> Cada gol vira um momento histórico.
+  </p>
+
+  <div class="mood-grid" style="margin-top:24px">
+    <div class="exp-card exp-card-dark" onclick="expToggle(this)">
+      <div class="exp-card-head">
+        <div class="exp-card-icon"><i data-lucide="moon" class="ic-sm ic-y"></i></div>
+        <span class="exp-card-title">apaga a luz e ativa o modo estádio</span>
+        <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+      </div>
+      <div class="exp-card-body">
+        <p>Liga o Arena Max, aponta pra parede e a sala vira outra coisa. Até 120 polegadas — o ambiente muda na hora, juro.</p>
+      </div>
+    </div>
+    <div class="exp-card exp-card-dark" onclick="expToggle(this)">
+      <div class="exp-card-head">
+        <div class="exp-card-icon"><i data-lucide="users" class="ic-sm ic-y"></i></div>
+        <span class="exp-card-title">chama o pessoal — essa noite vira história</span>
+        <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+      </div>
+      <div class="exp-card-body">
+        <p>Você sabe aquela reunião que todo mundo ainda fala anos depois? Começa com uma tela gigante, pessoal reunido e aquela energia de jogo.</p>
+      </div>
+    </div>
+    <div class="exp-card exp-card-dark" onclick="expToggle(this)">
+      <div class="exp-card-head">
+        <div class="exp-card-icon"><i data-lucide="volume-2" class="ic-sm ic-y"></i></div>
+        <span class="exp-card-title">gol na tela gigante bate diferente — muito diferente</span>
+        <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+      </div>
+      <div class="exp-card-body">
+        <p>Não tem como explicar — você tem que sentir. O grito sai do fundo da alma quando a tela toma conta da parede inteira.</p>
+      </div>
+    </div>
+    <div class="exp-card exp-card-dark" onclick="expToggle(this)">
+      <div class="exp-card-head">
+        <div class="exp-card-icon"><i data-lucide="calendar" class="ic-sm ic-y"></i></div>
+        <span class="exp-card-title">essa Copa não volta em 4 anos — não desperdiça</span>
+        <i data-lucide="chevron-down" class="ic-sm ic-y exp-card-chevron"></i>
+      </div>
+      <div class="exp-card-body">
+        <p>Daqui a 4 anos você vai lembrar dessa Copa — a pergunta é se vai lembrar como a que foi épica ou a que passou em branco.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ PROVA SOCIAL (antes do preço) -->
+<section class="proof-early">
+  <div class="eyebrow">Quem já viveu</div>
+  <h2 class="stitle ta-c">A experiência<br><em>em palavras reais</em></h2>
+
+  <div class="proof-count mt6">
+    <div>
+      <div class="proof-count-num">+4.200</div>
+      <div class="proof-count-text">clientes satisfeitos<br>em todo o Brasil</div>
+    </div>
+    <div style="width:1px;background:var(--stroke);margin:0 4px"></div>
+    <div>
+      <div class="proof-count-num">4.9</div>
+      <div class="proof-count-text" style="display:flex;flex-direction:column;gap:4px">
+        <span style="display:flex;gap:2px">
+          <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+          <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+          <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+          <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+          <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        </span>
+        <span>avaliação média</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="testi-grid mt6">
+    <div class="testi-card">
+      <div class="testi-stars">
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+      </div>
+      <p class="testi-text">"Minha sala virou o estádio. Juntei os amigos, apaguei a luz, projetei na parede e foi surreal. Parecia que estávamos no Maracanã."</p>
+      <div class="testi-author">
+        <div class="testi-av">CM</div>
+        <div>
+          <div class="testi-name">Carlos M.</div>
+          <div class="testi-loc">
+            <i data-lucide="map-pin" class="ic-xs ic-w5"></i>
+            São Paulo, SP · <span style="color:#4ade80">Compra verificada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+      </div>
+      <p class="testi-text">"Em 30 segundos a energia da sala mudou completamente. Todo mundo ficou vidrado. Não parece nem que é um projetor — parece que você tá num estádio."</p>
+      <div class="testi-author">
+        <div class="testi-av">FR</div>
+        <div>
+          <div class="testi-name">Fernanda R.</div>
+          <div class="testi-loc">
+            <i data-lucide="map-pin" class="ic-xs ic-w5"></i>
+            Curitiba, PR · <span style="color:#4ade80">Compra verificada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+      </div>
+      <p class="testi-text">"O gol você grita diferente sabe? A tela gigante muda tudo na emoção. Valeu muito mais que comprar uma TV nova pelo mesmo preço."</p>
+      <div class="testi-author">
+        <div class="testi-av">JP</div>
+        <div>
+          <div class="testi-name">João P.</div>
+          <div class="testi-loc">
+            <i data-lucide="map-pin" class="ic-xs ic-w5"></i>
+            Recife, PE · <span style="color:#4ade80">Compra verificada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+        <i data-lucide="star" class="ic-sm ic-y" style="fill:#FFD700"></i>
+      </div>
+      <p class="testi-text">"Tudo muito fácil, checkout simples e chegou rapidinho. Mas o que me surpreendeu foi a experiência — é completamente diferente de uma TV normal."</p>
+      <div class="testi-author">
+        <div class="testi-av">ML</div>
+        <div>
+          <div class="testi-name">Mariana L.</div>
+          <div class="testi-loc">
+            <i data-lucide="map-pin" class="ic-xs ic-w5"></i>
+            Belo Horizonte, MG · <span style="color:#4ade80">Compra verificada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ BENEFÍCIOS -->
+<section class="benefits">
+  <div class="eyebrow">Por que Arena Max</div>
+  <h2 class="stitle ta-c">Tudo que você precisa<br>para a <em>Copa perfeita</em></h2>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="maximize-2" class="ic-sm ic-y"></i></div>
+      <h3>Até 120 Polegadas</h3>
+      <p>Cinema imersivo em qualquer parede da sua casa</p>
+    </div>
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="zap" class="ic-sm ic-y"></i></div>
+      <h3>Pronto em 60 Seg</h3>
+      <p>Plug & play — sem instalação, sem técnico</p>
+    </div>
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="briefcase" class="ic-sm ic-y"></i></div>
+      <h3>Portátil</h3>
+      <p>Leve pra varanda, área gourmet ou quarto</p>
+    </div>
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="trophy" class="ic-sm ic-y"></i></div>
+      <h3>Copa Ready</h3>
+      <p>Cada gol vira um momento épico em tela gigante</p>
+    </div>
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="home" class="ic-sm ic-y"></i></div>
+      <h3>Qualquer Ambiente</h3>
+      <p>Sala, quarto, varanda ou área gourmet</p>
+    </div>
+    <div class="card">
+      <div class="card-icon-wrap"><i data-lucide="tag" class="ic-sm ic-y"></i></div>
+      <h3>Preço Inteligente</h3>
+      <p>Experiência premium por uma fração do custo de uma TV</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════ COMPARAÇÃO -->
+<section class="compare">
+  <div class="eyebrow">Comparativo</div>
+  <h2 class="stitle ta-c">
+    Por que pagar uma fortuna<br>numa TV se você pode ter<br><em>uma arena?</em>
+  </h2>
+  <div class="compare-table" role="table">
+    <div class="ct-head" role="row">
+      <div role="columnheader"></div>
+      <div role="columnheader">Arena Max</div>
+      <div role="columnheader">TV Grande</div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Tela gigante</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm" style="stroke:rgba(255,255,255,.2)"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Portátil</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Preço acessível</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Vários ambientes</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Fácil de guardar</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Frete grátis</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+    <div class="ct-row" role="row">
+      <div role="cell">Pagamento facilitado</div>
+      <div role="cell"><i data-lucide="check-circle" class="ic-sm ic-g"></i></div>
+      <div role="cell"><i data-lucide="x-circle" class="ic-sm" style="stroke:#ef4444;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))"></i></div>
+    </div>
+  </div>
+  <a href="https://pay.kaiross.com.br/8ZR14vQaJjMV" target="_blank" rel="noopener" class="btn-sec mt8">
+    <i data-lucide="shopping-cart" class="ic-sm ic-dark"></i>
+    QUERO O ARENA MAX AGORA
+  </a>
+  <div class="microcopy mt3">
+    <span class="microcopy-item"><i data-lucide="truck" class="ic-xs ic-w5"></i> Frete grátis</span>
+    <span style="color:var(--w1)">|</span>
+    <span class="microcopy-item"><i data-lucide="credit-card" class="ic-xs ic-w5"></i> Até 12x</span>
+    <span style="color:var(--w1)">|</span>
+    <span class="microcopy-item"><i data-lucide="shield-check" class="ic-xs ic-w5"></i> Compra segura</span>
+  </div>
+</section>
+
+<!-- ════════════════════════ OFERTA -->
+<section class="offer">
+  <div class="eyebrow">Oferta Especial Copa 2026</div>
+  <h2 class="stitle ta-c">
+    A experiência de estádio<br>pelo preço de uma <em>noite de pizza</em>
+  </h2>
+  <p class="sbody ta-c mt2" style="max-width:340px;margin-left:auto;margin-right:auto">
+    Garanta seu Arena Max com pagamento facilitado, <strong>frete grátis para todo o Brasil</strong> e parcelamento em até 12x no cartão.
+  </p>
+
+  <div class="offer-box">
+    <div class="offer-discount-tag">
+      <i data-lucide="flame" class="ic-xs ic-r"></i>
+      Desconto Copa 2026 — tempo limitado
+    </div>
+
+    <div class="price-from">De R$297,00</div>
+    <div class="price-installment-label">parcele em até 12x no cartão</div>
+    <div class="price-installment">
+      <span class="inst-x">12x</span>
+      <span class="inst-currency">R$</span>
+      <span class="inst-value">22</span>
+      <span class="inst-decimals">,33</span>
+    </div>
+    <div class="price-cash">ou <strong>R$267,90</strong> à vista</div>
+    <div class="price-saving">
+      <i data-lucide="trending-down" class="ic-xs ic-g"></i>
+      Você economiza R$29,10 nessa oferta
+    </div>
+
+    <div class="offer-stack">
+      <div class="offer-row">
+        <div class="offer-row-icon"><i data-lucide="truck" class="ic-sm ic-y"></i></div>
+        <div class="offer-row-text">
+          <div class="offer-row-title">Frete grátis para todo o Brasil</div>
+          <div class="offer-row-sub">O envio é por nossa conta — você não paga nada a mais</div>
+        </div>
+        <div class="offer-row-badge">R$0,00</div>
+      </div>
+      <div class="offer-row">
+        <div class="offer-row-icon"><i data-lucide="credit-card" class="ic-sm ic-y"></i></div>
+        <div class="offer-row-text">
+          <div class="offer-row-title">Parcelamento em até 12x</div>
+          <div class="offer-row-sub">Leve hoje e pague facilitado no cartão</div>
+        </div>
+        <div class="offer-row-badge">12x R$22,33</div>
+      </div>
+      <div class="offer-row">
+        <div class="offer-row-icon"><i data-lucide="shield-check" class="ic-sm ic-y"></i></div>
+        <div class="offer-row-text">
+          <div class="offer-row-title">Checkout 100% seguro</div>
+          <div class="offer-row-sub">Pagamento protegido e processamento rápido</div>
+        </div>
+        <div class="offer-row-badge" style="color:var(--ya)">Seguro</div>
+      </div>
+      <div class="offer-row">
+        <div class="offer-row-icon"><i data-lucide="zap" class="ic-sm ic-y"></i></div>
+        <div class="offer-row-text">
+          <div class="offer-row-title">Envio imediato</div>
+          <div class="offer-row-sub">Pedidos confirmados hoje saem em até 24h úteis</div>
+        </div>
+        <div class="offer-row-badge" style="color:var(--ya)">Hoje</div>
+      </div>
+    </div>
+
+    <a href="https://pay.kaiross.com.br/8ZR14vQaJjMV" target="_blank" rel="noopener" class="btn-primary">
+      <i data-lucide="shopping-cart" class="ic-sm ic-dark"></i>
+      GARANTIR MEU ARENA MAX COM FRETE GRÁTIS
+    </a>
+    <div class="microcopy mt4">
+      <span class="microcopy-item"><i data-lucide="shield-check" class="ic-xs ic-w5"></i> Checkout seguro</span>
+      <span style="color:var(--w1)">|</span>
+      <span class="microcopy-item"><i data-lucide="truck" class="ic-xs ic-w5"></i> Frete grátis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ URGÊNCIA / ESCASSEZ -->
+<section class="urgency">
+  <div class="urgency-badge">
+    <div class="urgency-live"></div>
+    Alerta de Estoque · Tempo Real
+  </div>
+
+  <h3>
+    <em>23 unidades</em> restantes<br>neste lote promocional
+  </h3>
+
+  <p class="urgency-sub">
+    Alta procura durante a temporada da Copa.<br>
+    Pedidos confirmados saem por ordem de chegada.
+  </p>
+
+  <div class="scarcity-numbers">
+    <div class="scarcity-num-block">
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="scarcity-arrow scarcity-arrow-up">▲</span>
+        <div class="scarcity-big" id="views-count">847</div>
+      </div>
+      <div class="scarcity-label">pessoas viram hoje</div>
+    </div>
+    <div class="scarcity-num-block">
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="scarcity-arrow scarcity-arrow-down">▼</span>
+        <div class="scarcity-big">23</div>
+      </div>
+      <div class="scarcity-label">unidades restantes</div>
+    </div>
+  </div>
+
+  <div class="stock-wrap">
+    <div class="stock-label-row">
+      <span style="display:flex;align-items:center;gap:5px">
+        <i data-lucide="alert-triangle" class="ic-xs ic-r"></i>
+        Estoque disponível
+      </span>
+      <span class="stock-pct" id="stockPct">87% reservado</span>
+    </div>
+    <div class="stock-track">
+      <div class="stock-fill" id="stockFill"></div>
+    </div>
+    <div class="stock-sub">
+      <i data-lucide="clock" class="ic-xs ic-r"></i>
+      Oferta ativa enquanto durar o lote
+    </div>
+  </div>
+
+  <a href="https://pay.kaiross.com.br/8ZR14vQaJjMV" target="_blank" rel="noopener" class="btn-sec mt8">
+    <i data-lucide="lock" class="ic-sm ic-dark"></i>
+    GARANTIR MINHA UNIDADE — R$267,90
+  </a>
+  <div class="microcopy mt4">
+    <span class="microcopy-item"><i data-lucide="truck" class="ic-xs ic-w5"></i> Frete grátis</span>
+    <span style="color:var(--w1)">|</span>
+    <span class="microcopy-item"><i data-lucide="credit-card" class="ic-xs ic-w5"></i> 12x no cartão</span>
+    <span style="color:var(--w1)">|</span>
+    <span class="microcopy-item"><i data-lucide="shield-check" class="ic-xs ic-w5"></i> Compra segura</span>
+  </div>
+</section>
+
+<!-- ════════════════════════ FAQ -->
+<section class="faq">
+  <div class="eyebrow">Tire suas dúvidas</div>
+  <h2 class="stitle ta-c">Perguntas <em>Frequentes</em></h2>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Quais formas de pagamento são aceitas?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        O Arena Max aceita <strong>cartão de crédito, débito e boleto bancário</strong>. O checkout é 100% seguro, com criptografia e processamento rápido do pedido.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        O frete é realmente grátis?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Sim. <strong>Frete 100% gratuito para todo o Brasil</strong>, qualquer cidade ou estado. Você paga pelo Arena Max — o envio é por nossa conta.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Precisa de instalação ou configuração?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Zero. O Arena Max é <strong>plug & play</strong> — você liga, aponta para a parede e em menos de 1 minuto está projetando. Sem técnico, sem configuração.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Funciona em qualquer parede?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Sim. Qualquer parede plana e clara — <strong>sala, quarto, varanda, área gourmet</strong>. Quanto mais clara a parede, melhor a imagem. Funciona também com telas de projeção.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Serve só para futebol ou funciona para outras coisas?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Para tudo. <strong>Copa, filmes, séries, YouTube, games, Netflix</strong> — qualquer conteúdo vira imersivo em tela gigante. Conecta por HDMI, USB e Wi-Fi.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Quanto tempo demora para chegar?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Pedidos confirmados hoje saem em até <strong>24 horas úteis</strong>. Prazo de entrega de 3 a 10 dias úteis dependendo da sua região. Rastreio disponível após o envio.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(this)" aria-expanded="false">
+        Posso parcelar no cartão?
+        <i data-lucide="chevron-down" class="ic-sm faq-arrow"></i>
+      </button>
+      <div class="faq-a">
+        Sim. Parcele em <strong>até 12x no cartão de crédito</strong> por R$22,33 por mês. O preço especial de R$267,90 já inclui frete grátis para todo o Brasil.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════ CTA FINAL -->
+<section class="final">
+  <div class="final-inner">
+    <div class="final-trophy">
+      <i data-lucide="trophy" class="ic-lg ic-y"></i>
+    </div>
+    <div class="eyebrow">Última Oportunidade</div>
+    <h2 class="stitle ta-c">
+      Essa Copa merece<br>ser <em>diferente.</em>
+    </h2>
+    <div class="sdivider"></div>
+    <p class="sbody ta-c mt4" style="margin-bottom:36px;max-width:340px;margin-left:auto;margin-right:auto">
+      Chame os amigos. Apague as luzes. Coloque o jogo na parede.<br><br>
+      <strong>Garanta agora por R$267,90 com frete grátis para todo o Brasil.</strong>
+    </p>
+
+    <a href="https://pay.kaiross.com.br/8ZR14vQaJjMV" target="_blank" rel="noopener" class="btn-primary">
+      <i data-lucide="zap" class="ic-sm ic-dark"></i>
+      SIM, QUERO MEU ARENA MAX POR R$267,90
+    </a>
+    <div class="microcopy mt4">
+      <span class="microcopy-item"><i data-lucide="truck" class="ic-xs ic-w5"></i> Frete grátis</span>
+      <span style="color:var(--w1)">|</span>
+      <span class="microcopy-item"><i data-lucide="credit-card" class="ic-xs ic-w5"></i> Até 12x no cartão</span>
+      <span style="color:var(--w1)">|</span>
+      <span class="microcopy-item"><i data-lucide="shield-check" class="ic-xs ic-w5"></i> Checkout seguro</span>
+    </div>
+
+    <div style="margin-top:44px;padding-top:32px;border-top:1px solid var(--w1)">
+      <p style="font-size:22px;font-weight:900;background:linear-gradient(135deg,#FFD700,#FFC107);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Arena Max</p>
+      <p style="font-size:12px;color:var(--w3);margin-top:4px;letter-spacing:.5px">Mini Projetor Portátil · Edição Copa 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ FOOTER -->
+<footer>
+  <p>
+    Arena Max · Mini Projetor Portátil<br>
+    Todos os direitos reservados · Produto original com garantia<br>
+    <span style="color:rgba(255,255,255,.2)">Dúvidas? Entre em contato antes de comprar.</span>
+  </p>
+</footer>
+
+<!-- ════════════════════════ STICKY BAR -->
+<div class="sticky" id="stickyCta" role="complementary" aria-label="Oferta rápida">
+  <div class="sticky-price">
+    <div class="sticky-from">R$297,00</div>
+    <div class="sticky-amount">R$267,90</div>
+    <div class="sticky-inst">
+      <i data-lucide="truck" class="ic-xs ic-w5"></i>
+      Frete grátis · 12x R$22,33
+    </div>
+  </div>
+  <a href="https://pay.kaiross.com.br/8ZR14vQaJjMV" target="_blank" rel="noopener" class="sticky-btn">
+    <i data-lucide="lock" class="ic-sm ic-dark"></i>
+    GARANTIR AGORA
+  </a>
+</div>
+
+<!-- ════════════════════════ LUCIDE ICONS -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+lucide.createIcons();
+
+// ── TOPBAR
+(function(){
+  var msgs=document.querySelectorAll('.topbar-msg'),i=0;
+  setInterval(function(){
+    msgs[i].classList.remove('active');
+    i=(i+1)%msgs.length;
+    msgs[i].classList.add('active');
+  },3200);
+})();
+
+// ── COUNTDOWN — Copa 2026 starts June 11, 2026
+(function(){
+  var target=new Date('2026-06-11T16:00:00Z').getTime();
+  function tick(){
+    var now=Date.now();
+    var diff=Math.max(0,target-now);
+    var d=Math.floor(diff/864e5);
+    var h=Math.floor((diff%864e5)/36e5);
+    var m=Math.floor((diff%36e5)/6e4);
+    var s=Math.floor((diff%6e4)/1e3);
+    document.getElementById('cd-days').textContent=String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-sec').textContent=String(s).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+})();
+
+// ── STICKY BAR
+(function(){
+  var s=document.getElementById('stickyCta');
+  var h=document.getElementById('hero-cta');
+  if(!s||!h)return;
+  new IntersectionObserver(function(e){
+    s.classList.toggle('show',!e[0].isIntersecting);
+  },{threshold:0}).observe(h);
+})();
+
+// ── EXPANDABLE CARDS
+function expToggle(card){
+  var isOpen=card.classList.contains('open');
+  card.classList.toggle('open',!isOpen);
+}
+
+// ── FAQ ACCORDION
+function faqToggle(btn){
+  var a=btn.nextElementSibling,open=btn.classList.contains('open');
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.classList.remove('open');q.setAttribute('aria-expanded','false');
+    q.nextElementSibling.classList.remove('open');
+  });
+  if(!open){btn.classList.add('open');btn.setAttribute('aria-expanded','true');a.classList.add('open');}
+}
+
+// ── STOCK BAR (animate on scroll into view)
+(function(){
+  var fill=document.getElementById('stockFill');
+  var pctEl=document.getElementById('stockPct');
+  if(!fill)return;
+  var pct=Math.floor(Math.random()*6)+84; // 84–89%
+  pctEl.textContent=pct+'% reservado';
+  new IntersectionObserver(function(e){
+    if(e[0].isIntersecting){fill.style.width=pct+'%';}
+  },{threshold:.3}).observe(fill);
+})();
+
+// ── VIEWS COUNTER (subtle live feel)
+(function(){
+  var el=document.getElementById('views-count');
+  if(!el)return;
+  var base=820+Math.floor(Math.random()*60);
+  el.textContent=base;
+  setInterval(function(){
+    if(Math.random()>.6){base+=Math.floor(Math.random()*3)+1;el.textContent=base;}
+  },8000);
+})();
+
+// ── SCROLL REVEAL
+(function(){
+  var selectors=[
+    '.eyebrow','.stitle','.sdivider','.sbody',
+    '.mood-item','.testi-card','.card',
+    '.trust-item','.cd-block',
+    '.offer-box','.offer-row',
+    '.scarcity-num-block','.stock-wrap',
+    '.faq-item','.hero-check',
+    '.demo-visual','.demo-chip',
+    '.compare-table','.final-trophy',
+    '.proof-count','.demo-sub'
+  ];
+  var delays=['reveal-d1','reveal-d2','reveal-d3','reveal-d4','reveal-d5'];
+
+  // tag elements
+  selectors.forEach(function(sel){
+    document.querySelectorAll(sel).forEach(function(el,i){
+      el.classList.add('reveal');
+      if(i>0&&i<5) el.classList.add(delays[i-1]);
+    });
+  });
+
+  // also reveal each section's direct block
+  document.querySelectorAll('section,.trust').forEach(function(sec){
+    sec.classList.add('reveal');
+  });
+
+  // Atribui uma variante de fade POR SEÇÃO — todos os filhos .reveal herdam o mesmo efeito
+  var sectionFx = {
+    'hero':         'fx-rise',
+    'trust':        'fx-zoom-in',
+    'problem':      'fx-slide-right',
+    'experience':   'fx-slide-left',
+    'proof-early':  'fx-soft',
+    'benefits':     'fx-pop',         // cards estouram com mola
+    'compare':      'fx-flip',        // tabela vira em 3D
+    'offer':        'fx-burst',       // oferta explode escalando
+    'urgency':      'fx-diagonal',    // escassez entra em diagonal
+    'faq':          'fx-swing',       // perguntas balançam pra entrar
+    'final':        'fx-burst',       // CTA final explode também
+  };
+  Object.keys(sectionFx).forEach(function(sectionClass){
+    var fx = sectionFx[sectionClass];
+    document.querySelectorAll('section.'+sectionClass+', .'+sectionClass).forEach(function(sec){
+      sec.classList.add(fx);
+      sec.querySelectorAll('.reveal').forEach(function(child){
+        child.classList.add(fx);
+      });
+    });
+  });
+
+  // Bidirectional fade: in quando entra, out quando sai (top OU bottom)
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var el = e.target;
+      if (e.isIntersecting && e.intersectionRatio > 0.08){
+        el.classList.add('is-visible');
+        el.classList.remove('is-leaving');
+      } else {
+        // só marca como "leaving" se já apareceu pelo menos uma vez
+        if (el.classList.contains('is-visible')){
+          el.classList.remove('is-visible');
+          el.classList.add('is-leaving');
+        }
+      }
+    });
+  },{threshold:[0, .08, .25],rootMargin:'-8% 0px -8% 0px'});
+
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+
+// ── PARTICLES
+(function(){
+  var c=document.getElementById('particles');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var W=0,H=0;
+  var pts=[];
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  for(var i=0;i<30;i++){
+    pts.push({x:Math.random()*1200,y:Math.random()*900,
+      vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,
+      r:Math.random()*1.2+.4,o:Math.random()*.35+.08});
+  }
+  function frame(){
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x%W,p.y%H,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,215,0,'+p.o+')';
+      ctx.fill();
+    });
+  }
+  frame();
+})();
+
+/* ═══════════════════ MOTION LAYER — interações ═══════════════════ */
+(function(){
+  /* ─── CONFETE BURST ─── */
+  var CONFETTI_COLORS = ['#FFD700','#009c3b','#FEDF00','#002776','#22c55e','#ef4444','#ffffff'];
+  function confettiBurst(x, y, count){
+    count = count || 32;
+    var layer = document.body;
+    for (var i=0; i<count; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      var c = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+      piece.style.background = c;
+      piece.style.left = x + 'px';
+      piece.style.top  = y + 'px';
+      piece.style.borderRadius = Math.random() > .5 ? '2px' : '50%';
+      piece.style.width  = (4 + Math.random()*6) + 'px';
+      piece.style.height = (8 + Math.random()*10) + 'px';
+      var angle = Math.random() * Math.PI * 2;
+      var velocity = 80 + Math.random() * 160;
+      var dx = Math.cos(angle) * velocity;
+      var dy = Math.sin(angle) * velocity - 80;
+      var rot = (Math.random() * 720 - 360) + 'deg';
+      var dur = 900 + Math.random() * 600;
+      piece.animate([
+        { transform:'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform:'translate('+dx+'px,'+(dy+260)+'px) rotate('+rot+')', opacity:0 }
+      ], { duration:dur, easing:'cubic-bezier(.2,.7,.3,1)', fill:'forwards' });
+      document.body.appendChild(piece);
+      setTimeout(function(p){ p.remove(); }, dur+50, piece);
+    }
+  }
+
+  /* Dispara confete ao clicar em qualquer CTA */
+  document.addEventListener('click', function(ev){
+    var t = ev.target.closest('.btn-primary, .cta-final, .sticky-cta, [class*="btn-"], [class*="cta"]');
+    if (!t) return;
+    var r = t.getBoundingClientRect();
+    confettiBurst(r.left + r.width/2, r.top + r.height/2, 28);
+  });
+
+  /* ─── TAP RIPPLE nos cards expansivos ─── */
+  document.querySelectorAll('.exp-card').forEach(function(card){
+    card.style.position = card.style.position || 'relative';
+    card.style.overflow = 'hidden';
+    card.addEventListener('click', function(ev){
+      var r = card.getBoundingClientRect();
+      var rip = document.createElement('span');
+      rip.className = 'ripple';
+      rip.style.left = (ev.clientX - r.left) + 'px';
+      rip.style.top  = (ev.clientY - r.top) + 'px';
+      rip.style.width = rip.style.height = '40px';
+      card.appendChild(rip);
+      setTimeout(function(){ rip.remove(); }, 650);
+    });
+  });
+
+  /* ─── PRICE PULSE — aplica em preços principais ─── */
+  document.querySelectorAll('.price, .cd-price, [class*="price"]').forEach(function(el){
+    if (el.closest('.compare-table')) return;
+    el.classList.add('price-pulse');
+  });
+
+
+})();
+</script>
+</body>
+</html>
